@@ -1,0 +1,47 @@
+﻿@model SkinShop.Models.LoginModel
+
+@{
+    ViewBag.Title = "LoginView";
+}
+
+@Styles.Render("~/Content/SkinShopCSS/Login.css")
+
+<div class="caption gradient-text">В х о д</div>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.Label("Электронная почта", htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.Label("Пароль", htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <input type="submit" value="Войти" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}
+
+<div class="register">
+    @Html.ActionLink("Зарегистрироваться", "Register", "Account", new { @class = "btn btn-info" })
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

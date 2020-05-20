@@ -1,0 +1,106 @@
+﻿@model SkinShop.Models.SkinShop.FavoritesDM
+
+@{
+    ViewBag.Title = "Favorites";
+}
+
+@Styles.Render("~/Content/SkinShopCSS/Favorites.css")
+
+<div class="caption gradient-text">И з б р а н н о е</div>
+
+@if (Model == null || Model.Products == null || Model.Products.FirstOrDefault() == null)
+{
+    <div class="favorite-text">
+        У Вас пока нет товаров в избранном
+    </div>
+    <div class="toskins-button">
+        <a href="@Url.Action("Index", "Home")" class="btn btn-info">Перейти к скинам</a>
+    </div>
+}
+else
+{
+    <div class="container-fluid">
+        @foreach (var i in Model.Products)
+        {
+            <div class="commonblock row">
+                <div class="blockhere col-md-8 col-md-offset-1 col-sm-11 col-sm-offset-1 col-xs-11 col-xs-offset-1">
+                    @{
+                        string route = "";
+                        switch (i.Table)
+                        {
+                            case SkinShop.DL.Entities.SkinShop.Goods.Skin:
+                                route = "SkinDetails";
+                                break;
+                            case SkinShop.DL.Entities.SkinShop.Goods.Game:
+                                route = "GameDetails";
+                                break;
+                            case SkinShop.DL.Entities.SkinShop.Goods.Cloth:
+                                route = "ClothDetails";
+                                break;
+                            case SkinShop.DL.Entities.SkinShop.Goods.Computer:
+                                route = "ComputerDetails";
+                                break;
+                            case SkinShop.DL.Entities.SkinShop.Goods.ComputerComponent:
+                                route = "ComputerComponentDetails";
+                                break;
+                            case SkinShop.DL.Entities.SkinShop.Goods.Container:
+                                route = "ContainerDetails";
+                                break;
+                            case SkinShop.DL.Entities.SkinShop.Goods.Other:
+                                route = "OtherDetails";
+                                break;
+                        }
+                    }
+                    <a href="@Url.Action(route, "Home", new { id = i.Id })" class="link">
+                        <div class="image">
+                            @if (i.Images.FirstOrDefault() != null)
+                            {
+                                <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(i.Images.FirstOrDefault().Photo))" alt="@i.Images.FirstOrDefault().Text" class="img-responsive imgcustom">
+                            }
+                        </div>
+                        <div class="text">
+                            <div class="name-fav">
+                                @i.Name
+                            </div>
+                            <div class="price-fav">
+                                @if (i.Sale > 0)
+                                {
+                                    <div class="oldprice">@i.Price uah</div>
+                                    <div class="newprice">@(i.Price - ((i.Price * i.Sale) / 100)) uah</div>
+                                }
+                                else
+                                {
+                                    <div class="newprice">@i.Price uah</div>
+                                }
+                            </div>
+                            <div class="count-icons">
+                                <img src="~/Content/Images/Icons/icons8-показать-50.png" alt="show" class="producticon" />@i.CountSeen
+                                <img src="~/Content/Images/Icons/icons8-корзина-50.png" alt="show" class="producticon" />@i.CountOrders
+                                <img src="~/Content/Images/Icons/icons8-сердце-50.png" alt="show" class="producticon" />@i.CountFavorites
+                            </div>
+                            <div class="assessment-rezult">
+                                @if (i.Comments!=null)
+                                {
+                                    <div>
+                                        <img src="~/Content/Images/Icons/icons8-звезда-48.png" class="star" alt="star" />
+                                        @Math.Round(Convert.ToDouble(i.Comments.Sum(x => x.Assessment)) / Convert.ToDouble(i.Comments.Count), 1)
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div>
+                                        <img src="~/Content/Images/Icons/icons8-звезда-48.png" class="star" alt="star" />
+                                        0
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="deletebutton col-md-2 col-md-offset-1">
+                    <a href="@Url.Action("DeleteFromFavorite", "Client", new { skinid = i.Id })" class="form-control btn btn-danger">Удалить</a>
+                </div>
+            </div>
+        }
+    </div>
+}

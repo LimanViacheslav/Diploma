@@ -1,0 +1,124 @@
+﻿@model SkinShop.Models.ViewModels.ComputerComponentsVM
+
+@if (Model != null)
+{
+    foreach (var i in Model.ComputerComponents)
+    {
+        <div class="col-md-4 col-xs-10 col-sm-6 block">
+            @if (User.IsInRole("admin"))
+            {
+                <div class="deleteskin">
+                    @Ajax.ActionLink("Удалить", "DeleteComputerComponent", "Admin", new { id = i.Id }, new AjaxOptions { LoadingElementId = "loading" }, new { @class = "btn btn-danger" })
+                </div>
+                <div class="update">
+                    <a href="@Url.Action("UpdateComputerComponent", "Admin", new { id = i.Id})" class="btn btn-info">Изменить</a>
+                </div>
+            }
+            else
+            {
+                <div class="pseudo"></div>
+            }
+            <a href="@Url.Action("ComputerComponentDetails", "Home", new { id = i.Id })" class="link">
+                <div class="image">
+                    @if (i.Images.FirstOrDefault() != null)
+                    {
+                        <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(i.Images.FirstOrDefault().Photo))" alt="@i.Images.FirstOrDefault().Text" class="img-responsive imgcustom">
+                    }
+                </div>
+                @if (i.Sale > 0)
+                {
+                    <div class="sale">
+                        <img src="~/Content/Images/Sale.png" alt="sale" />
+                    </div>
+                }
+                @if ((DateTime.Now - i.DateOfAdded).Days < 7)
+                {
+                    <div class="new">
+                        <img src="~/Content/Images/new.png" alt="new" />
+                    </div>
+                }
+                <div class="text">
+                    <div class="name">
+                        @i.Name
+                    </div>
+                    <div class="price">
+                        @if (i.Sale > 0)
+                        {
+                            <div class="oldprice">@i.Price uah</div>
+                            <div class="newprice">@(i.Price - ((i.Price * i.Sale) / 100)) uah</div>
+                        }
+                        else
+                        {
+                            <div class="newprice">@i.Price uah</div>
+                        }
+                    </div>
+                    <div class="characteristics">
+                        <div>
+                            <img src="~/Content/Images/Icons/icons8-показать-50.png" alt="show" class="producticon" />@i.CountSeen
+                            <img src="~/Content/Images/Icons/icons8-корзина-50.png" alt="show" class="producticon" />@i.CountOrders
+                            <img src="~/Content/Images/Icons/icons8-сердце-50.png" alt="show" class="producticon" />@i.CountFavorites
+                        </div>
+                        <div class="assessment-rezult">
+                            @if (i.Comments.Any())
+                            {
+                                <div>
+                                    <img src="~/Content/Images/Icons/icons8-звезда-48.png" class="star" alt="star" />
+                                    @Math.Round(Convert.ToDouble(i.Comments.Sum(x => x.Assessment)) / Convert.ToDouble(i.Comments.Count), 1)
+                                </div>
+                            }
+                            else
+                            {
+                                <div>
+                                    <img src="~/Content/Images/Icons/icons8-звезда-48.png" class="star" alt="star" />
+                                    0
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </div>
+    }
+}
+
+<div class="btn-group custom">
+    @for (int i = 1; i <= Model.PageInfo.TotalPages; i++)
+    {
+        if (i == Model.PageInfo.PageNumber)
+        {
+            <button id="@i" name="@i" value="@i" class="button btn btn-info active pagin">@i</button>
+        }
+        else
+        {
+            <button id="@i" name="@i" value="@i" class="button btn btn-default pagin">@i</button>
+        }
+    }
+</div>
+
+<script type="text/javascript">
+    function Reset() {
+        document.getElementById('form0').reset();
+        $('.forgame').removeAttr("checked");
+        $('#forcheked').val("");
+        $('.filters').hide("slow");
+        $('.filters').attr("name", "closed");
+        $('.filter-label').css("border-top-color", "lightgray");
+        $('.filter-label').css("border-bottom-color", "transparent");
+        Submit();
+    }
+
+    function Submit() {
+        $('body,html').animate({ scrollTop: 0 }, 800);
+        $('#page').val("1")
+        $('#submit').click();
+    }
+
+    $('.button').click(function (event) {
+        $('#page').val(event.target.value)
+        $('#submit').click();
+    })
+
+    $('.pagin').click(function (event) {
+        $('body,html').animate({ scrollTop: 0 }, 800);
+    });
+</script>

@@ -1,0 +1,115 @@
+﻿@model SkinShop.Models.ViewModels.PayVM
+
+@Styles.Render("~/Content/SkinShopCSS/CreateSkin.css")
+@if (Model.IsReplenishing)
+{
+    <div class="caption gradient-text">П о п о л н е н и е</div>
+}
+else
+{
+    <div class="caption gradient-text">О п л а т а</div>
+}
+@if (ViewBag.Status == false)
+{
+    <div class="text-danger">
+        @if (ViewBag.Result != null)
+        {
+            <p>
+                @ViewBag.Result
+            </p>
+        }
+    </div>
+}
+else
+{
+    <div class="text-success">
+        @if (ViewBag.Result != null)
+        {
+            <p>
+                @ViewBag.Result
+            </p>
+        }
+    </div>
+}
+
+@if (!Model.IsReplenishing)
+{
+    <div class="needed-block">
+        <div class="needed-text">
+            Необходимая сумма
+        </div>
+        <div class="needed-emount">
+            @Model.Sum uah
+        </div>
+    </div>
+}
+
+    <div class="card-data">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            if (Model.IsReplenishing)
+            {
+                <input type="text" value="replenishing" name="payed" hidden />
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        @Html.Label("Номер карты", htmlAttributes: new { @class = "control-label" })
+                        <div>
+                            <input type="text" name="cardnumber" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Срок действия карты", htmlAttributes: new { @class = "control-label" })
+                        <div>
+                            <input type="text" name="month" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Сумма пополнения", htmlAttributes: new { @class = "control-label" })
+                        <div>
+                            <input type="text" name="ReplenishSum" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div>
+                            <input type="submit" name="submit" value="Пополнить" class="btn btn-success" />
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <input type="text" value="@Model.OrderId" name="OrderId" hidden />
+                <input type="text" value="payed" name="payed" hidden />
+                <div class="form-horizontal">
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <div class="form-group">
+                        @Html.Label("Номер карты", htmlAttributes: new { @class = "control-label" })
+                        <div>
+                            <input type="text" name="cardnumber" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.Label("Срок действия карты", htmlAttributes: new { @class = "control-label" })
+                        <div>
+                            <input type="text" name="month" class="form-control" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div>
+                            <input type="submit" name="submit" value="Оплатить" class="btn btn-success" />
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>

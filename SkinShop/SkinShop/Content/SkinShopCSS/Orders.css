@@ -1,0 +1,289 @@
+﻿body {
+    color: darkgray;
+}
+
+.mainblock {
+    border: 3px solid darkgray;
+    border-radius: 5px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    float: left;
+}
+
+.linkskin {
+    text-decoration: none !important;
+    color: lightgray !important;
+}
+
+.linkblock {
+    width: 100%;
+    float: left;
+}
+
+.linkblock:hover {
+    background: rgba(0, 0, 0, 0.5);
+    transform: scale(1.05);
+    transition-duration: .3s;
+    border: 1px solid white;
+}
+
+.price {
+    font-size: 16px;
+    text-align: right;
+}
+
+.oldprice {
+    color: gray;
+    text-decoration: line-through;
+}
+
+.newprice {
+    font-size: 20px;
+    color: green;
+}
+
+.order-image {
+    height: 12.5em;
+    float: left;
+}
+
+.imgcustom {
+    height: 12.5em;
+}
+
+.textskin {
+    float: left;
+    padding: 2%;
+    width: 50%;
+}
+
+.client {
+    margin-top: 2%;
+    width: 95%;
+    font-size: 16px;
+    float: left;
+}
+
+.client a {
+    text-decoration: none !important;
+    color: lightgray !important;
+}
+
+.client:hover {
+    background: rgba(0, 0, 0, 0.3);
+    transition-duration: .3s;
+}
+
+.clientname {
+    width: 50%;
+}
+
+.clientphonenumber {
+    width: 50%;
+}
+
+.skins {
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.count {
+    float: right;
+    padding: 2%;
+}
+
+.allprice {
+    color: lightgray;
+    font-size: 16px;
+    float: right;
+}
+
+.status {
+    color: lightgray;
+    font-size: 16px;
+}
+
+.employeeblock {
+    margin: 1%;
+    width: 20em;
+}
+
+.confirm, .reject {
+    margin: 2%;
+    width: 100px;    
+}
+
+.downblock {
+    margin: 2%;
+}
+
+.caption {
+    font-size: 40px;
+    text-align: center;
+    color: lightgray;
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    padding: 20px;
+    margin: 2%;
+    width: 100%;
+}
+
+.gradient-text {
+    font-size: 40px;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, red 33%, #0D61BC 66%, #8AA9D6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #0B2349;
+    display: table;
+    margin: 20px auto;
+    font-weight: bold;
+}
+
+#loading {
+    display: none;
+    font-size: 30px;
+    text-align: center;
+    color: greenyellow;
+}
+
+.customform {
+    font-size: 18px;
+}
+
+.form-control {
+    font-size: 17px;
+    padding-left: 10px;
+    padding-top: 0;
+}
+
+.pricegroup {
+    margin-top: 2%;
+    text-align: left;
+    float: left;
+    font-size: 17px;
+    margin-right: 20px;
+}
+
+.statusgroup .tag {
+    padding-bottom: 10px;
+}
+
+.pricegroup input {
+    width: 100px;
+    float: right;
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 18px;
+}
+
+.pricegroup .input {
+    float: left;
+    margin: 10px;
+}
+
+.uah {
+    float: right;
+}
+
+.statusgroup {
+    text-align: left;
+    padding: 5px;
+    float: left;
+    margin-top: 2%;
+}
+
+.statusgroup input[type="checkbox"] {
+    padding: 20px;
+}
+
+.form-group {
+    margin: 2% auto;
+}
+
+.btn {
+    font-size: 17px;
+}
+
+.orders-text {
+    color: lightgray;
+    margin: 2%;
+    width: 40%;
+    font-size: 30px;
+}
+
+.toskins-button {
+    margin: 2%;
+    width: 20%;
+}
+
+.color-block {
+    margin-bottom: 10px;
+    color: lightgray;
+}
+
+.color-block span {
+    padding-left: 5px;
+}
+
+.color {
+    float: left;
+    width: 25px;
+    height: 25px;
+    border: 3px solid white;
+    border-radius: 25px;
+}
+
+.characteristics {
+    float: left;
+}
+
+.color-tag {
+    float: left;
+    padding-right: 10px;
+}
+
+.delete-block {
+    float:right;
+    margin-top: 2%;
+}
+
+.dateblock {
+    float: right;
+}
+
+.delivery {
+    color: lightgray;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+    float: left;
+    width: 100%;
+}
+
+.pay-block {
+    color: lightgray;
+    font-size: 18px;
+    float: left;
+    width: 100%;
+}
+
+.del .filter-label {
+    float: left !important;
+}
+
+.del {
+    margin-bottom: 20px;
+    cursor: pointer;
+}
+
+.deleted {
+    color: gray;
+}
+
+.reestablish .btn {
+    color: gray;
+}
+
+.reestablish .btn:hover {
+    color: lightgray;
+}

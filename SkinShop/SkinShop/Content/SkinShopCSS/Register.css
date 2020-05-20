@@ -1,0 +1,66 @@
+﻿.caption {
+    font-size: 40px;
+    text-align: center;
+    color: lightgray;
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    padding: 20px;
+    margin: 2%;
+    width: 100%;
+}
+
+.gradient-text {
+    font-size: 40px;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, red 33%, #0D61BC 66%, #8AA9D6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #0B2349;
+    display: table;
+    margin: 20px auto;
+    font-weight: bold;
+}
+
+.form-horizontal {
+    width: 500px !important;
+    margin: 2% auto;
+}
+
+form {
+    border: none !important;
+}
+
+.form-control {
+    background-color: transparent !important;
+    color: lightgray;
+}
+
+.form-group {
+    width: 40%;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin: 10px auto !important;
+}
+
+@media (max-width: 995px) {
+    .form-group {
+        width: 50%;
+    }
+}
+
+@media (max-width: 650px) {
+    .form-group {
+        width: 60%;
+    }
+}
+
+@media (max-width: 400px) {
+    .form-group {
+        width: 80%;
+    }
+}
+
+.but {
+    width: 10%;
+    margin: 10px auto !important;
+}

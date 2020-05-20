@@ -1,0 +1,165 @@
+﻿@model SkinShop.Models.ViewModels.CreateComputerVM
+
+@Styles.Render("~/Content/SkinShopCSS/CreateSkin.css")
+<div class="caption gradient-text">Создать компьютер</div>
+@if (ViewBag.Status == false)
+{
+    <div class="text-danger">
+        @if (ViewBag.Result != null)
+        {
+            <p>
+                @ViewBag.Result
+            </p>
+        }
+    </div>
+}
+else
+{
+    <div class="text-success">
+        @if (ViewBag.Result != null)
+        {
+            <p>
+                @ViewBag.Result
+            </p>
+        }
+    </div>
+}
+<div class="addgameblock">
+    <a class="btn btn-info addgame" href="@Url.Action("CreateComputerComponent", "Admin")">Добавить компьютерный компонент</a>
+</div>
+@using (Html.BeginForm("CreateComputer", "Admin", FormMethod.Post, new { enctype = "multipart/form-data", @id = "form" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SelectedProcessor, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.DropDownList("SelectedProcessor", Model.Processors, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SelectedProcessor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SelectedMotherBoard, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.DropDownList("SelectedMotherBoard", Model.MotherBoards, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SelectedMotherBoard, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SelectedPowerSupply, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.DropDownList("SelectedPowerSupply", Model.PowerSupplies, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SelectedPowerSupply, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SelectedSystemBlock, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.DropDownList("SelectedSystemBlock", Model.SystemBlocks, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SelectedSystemBlock, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SelectedRAM, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.ListBox("SelectedRAM", Model.RAMs, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SelectedRAM, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SelectedROM, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.ListBox("SelectedROM", Model.ROMs, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SelectedROM, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.SelectedVideoCard, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.ListBox("SelectedVideoCard", Model.VideoCards, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.SelectedVideoCard, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.EditorFor(model => model.Price, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Price, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Sale, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.EditorFor(model => model.Sale, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Sale, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @if (Model != null && Model.ImagesInDatebase != null)
+        {
+            <div class="imgtext">Текущие изображения</div>
+            foreach (var i in Model.ImagesInDatebase)
+            {
+                <div class="imgblock">
+                    <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(i.Photo))" alt="@i.Text" class="img-responsive imgcustom">
+                </div>
+            }
+        }
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Images, htmlAttributes: new { @class = "control-label" })
+            <div>
+                <input name="Images" type="file" accept=".jpg" />
+                @Html.ValidationMessageFor(model => model.Images, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Alt, htmlAttributes: new { @class = "control-label" })
+            <div>
+                @Html.EditorFor(model => model.Alt, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Alt, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Properties, htmlAttributes: new { @class = "control-label" })
+            <div>
+                <span>Название: <input type="text" name="Property.Name" class="form-control" /></span>
+                <span>Значение: <input type="text" name="Property.Value" class="form-control" /></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div>
+                <input type="submit" value="Сохранить" class="btn btn-success" />
+            </div>
+        </div>
+    </div>
+}

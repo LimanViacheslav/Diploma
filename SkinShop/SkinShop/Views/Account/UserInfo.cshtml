@@ -1,0 +1,283 @@
+﻿@model SkinShop.Models.Account.UserDM
+@{
+
+    ViewBag.Title = "UserInfo";
+}
+@Styles.Render("~/Content/SkinShopCSS/UserInfo.css")
+
+@if (User.Identity.Name != Model.UserName)
+{
+    <div class="caption gradient-text">П р о ф и л ь</div>
+}
+else
+{
+    <div class="caption gradient-text">Л и ч н ы й К а б и н е т</div>
+}
+<div id="result"></div>
+    <div class="out">
+        <div class="image-block">
+            @if (Model.Image != null)
+            {
+                <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(Model.Image.Photo))" alt="@Model.Image.Text" class="img-responsive imgcustom">
+            }
+        </div>
+        <div class="upper">
+            <div class="name">
+                @Html.DisplayFor(model => model.Name)
+            </div>
+            @if (User.IsInRole("user"))
+            {
+                <div class="money">
+                    <div class="sum">
+                        На счёте: <span class="green">@(Model.Client?.Money) uah</span>
+                    </div>
+                    <div class="money-btn">
+                        <a href="@Url.Action("Pay","Client")" class="btn">Пополнить счёт</a>
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="common">
+            @if (Model.Role != null)
+            {
+                if (Model.Role == "admin")
+                {
+                    <h4 class="admin role">Администратор</h4>
+                }
+                if (Model.Role == "user")
+                {
+                    <h4 class="user role">Пользователь</h4>
+                }
+                if (Model.Role == "manager")
+                {
+                    <h4 class="manager role">Менеджер</h4>
+                }
+            }
+            <div class="title">
+                Электронная почта: @Html.DisplayFor(model => model.UserName)
+            </div>
+            <div class="title">
+                Псевдоним: @Html.DisplayFor(model => model.UserName)
+            </div>
+            <div class="title">
+                Номер телефона:
+                @if (Model.PhoneNumber != "")
+                {
+                    @Html.DisplayFor(model => model.PhoneNumber)
+                }
+                else
+                {
+                    <span> - </span>
+                }
+            </div>
+        </div>
+        @if (User.IsInRole("user") && Model.Client?.Containers != null && Model.Client?.Containers?.FirstOrDefault() != null)
+        {
+            <div class="containers">
+                <div class="cont">
+                    <div class="tag local" id="contid">
+                        Контейнеры
+                    </div>
+                    <div id="contid-label" class="filter-label"></div>
+                </div>
+                      <div id="contid-block" name="closed" hidden>
+                          @foreach (var i in Model.Client.Containers)
+                          {
+                              if (i.CountOpens > 0)
+                              {
+                                  <div class="col-md-3 col-xs-10 col-sm-6 block">
+                                      <a href="@Url.Action("ContainerDetails", "Home", new { id = i.Id })" class="link">
+                                          <div class="image">
+                                              @if (i.Container.Images.FirstOrDefault() != null)
+                                              {
+                                                  <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(i.Container.Images.FirstOrDefault().Photo))" alt="@i.Container.Images.FirstOrDefault().Text" class="img-responsive imgcustom">
+                                              }
+                                          </div>
+                                          <div class="descriptiontext">
+                                              <div class="name">
+                                                  @i.Container.Name
+                                              </div>
+                                          </div>
+                                          <div class="tag count-tag">В наличии</div>
+                                          <div class="count">
+                                              @i.CountOpens
+                                          </div>
+                                      </a>
+                                      <div class="open money-btn">
+                                          <a href="@Url.Action("Open", "Client", new { id = i.Container.Id})" class="btn">Открыть</a>
+                                      </div>
+                                  </div>
+                              }
+                          }
+                      </div>
+            </div>
+        }
+        @if (User.IsInRole("user") && Model.Client?.Products != null && Model.Client?.Products?.FirstOrDefault() != null)
+        {
+            <div class="containers">
+                <div class="cont">
+                    <div class="tag local" id="prodid">
+                        Товары
+                    </div><div class="filter-label" id="prodid-label"></div>
+                </div>
+                <div id="prodid-block" name="closed" hidden>
+                    @foreach (var i in Model.Client.Products)
+                    {
+                        <div class="col-md-3 col-xs-10 col-sm-6 block prods">
+                            @{
+                                string route = "";
+                                switch (i.Container.Table)
+                                {
+                                    case SkinShop.DL.Entities.SkinShop.Goods.Skin:
+                                        route = "SkinDetails";
+                                        break;
+                                    case SkinShop.DL.Entities.SkinShop.Goods.Game:
+                                        route = "GameDetails";
+                                        break;
+                                    case SkinShop.DL.Entities.SkinShop.Goods.Cloth:
+                                        route = "ClothDetails";
+                                        break;
+                                    case SkinShop.DL.Entities.SkinShop.Goods.Computer:
+                                        route = "ComputerDetails";
+                                        break;
+                                    case SkinShop.DL.Entities.SkinShop.Goods.ComputerComponent:
+                                        route = "ComputerComponentDetails";
+                                        break;
+                                    case SkinShop.DL.Entities.SkinShop.Goods.Container:
+                                        route = "ContainerDetails";
+                                        break;
+                                    case SkinShop.DL.Entities.SkinShop.Goods.Other:
+                                        route = "OtherDetails";
+                                        break;
+                                }
+                            }
+                            <a href="@Url.Action(route, "Home", new { id = i.Container.Id })" class="link">
+                                <div class="image">
+                                    @if (i.Container.Images.FirstOrDefault() != null)
+                                    {
+                                        <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(i.Container.Images.FirstOrDefault().Photo))" alt="@i.Container.Images.FirstOrDefault().Text" class="img-responsive imgcustom">
+                                    }
+                                </div>
+                                <div class="descriptiontext">
+                                    <div class="name">
+                                        @i.Container.Name
+                                    </div>
+                                </div>
+                                <div class="tag count-tag">В наличии</div>
+                                <div class="count">
+                                    @i.CountOpens
+                                </div>
+                            </a>
+                            @using (Ajax.BeginForm("SaleProduct", "Client", new AjaxOptions { UpdateTargetId = "result", LoadingElementId = "loading" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <div class="form-horizontal customform">
+                                    <div class="form-group">
+                                        <input name="id" value="@i.Container.Id" hidden />
+                                        <input name="count" type="number" class="form-control count-inp" min="1" max="@i.CountOpens" value="1" />
+                                        <input id="submit" type="submit" value="Продать" class="btn submit-btn" />
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        @if (User.IsInRole("user") && Model.Client?.ContainerToCountOpens != null && Model.Client?.ContainerToCountOpens?.FirstOrDefault() != null)
+        {
+            <div class="containers">
+                <div class="cont">
+                    <div class="tag local" id="contopenid">
+                        Статистика
+                    </div><div class="filter-label" id="contopenid-label"></div>
+                </div>
+                <div id="contopenid-block" name="closed" hidden>
+                    @foreach (var i in Model.Client.ContainerToCountOpens)
+                    {
+                        <div class="col-md-3 col-xs-10 col-sm-6 block countopen">
+                            <a href="@Url.Action("ContainerDetails", "Home", new { id = i.Id })" class="link">
+                                <div class="image">
+                                    @if (i.Container.Images.FirstOrDefault() != null)
+                                    {
+                                        <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(i.Container.Images.FirstOrDefault().Photo))" alt="@i.Container.Images.FirstOrDefault().Text" class="img-responsive imgcustom">
+                                    }
+                                </div>
+                                <div class="descriptiontext">
+                                    <div class="name">
+                                        @i.Container.Name
+                                    </div>
+                                </div>
+                                <div class="tag count-tag">Всего открыто</div>
+                                <div class="count">
+                                    @i.CountOpens
+                                </div>
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        <div class="links">
+            <div class="usefull">
+                Полезные ссылки
+            </div>
+            @if (User.IsInRole("user"))
+            {
+                <div class="money-btn float">
+                    <a href="@Url.Action("Main","Home")" class="btn">Главная</a>
+                </div>
+                <div class="money-btn float">
+                    <a href="@Url.Action("Basket","Client")" class="btn">Корзина</a>
+                </div>
+            }
+        </div>
+    </div>
+<div class="lol"></div>
+
+<script type="text/javascript">
+    $('#contid').click(function () {
+        if ($('#contid-block').attr('name') == "closed") {
+            $('#contid-block').show("slow");
+            $('#contid-block').attr("name", "open");
+            $('#contid-label').css("border-bottom-color", "lightgray");
+            $('#contid-label').css("border-top-color", "transparent");
+        }
+        else {
+            $('#contid-block').hide("slow");
+            $('#contid-block').attr("name", "closed");
+            $('#contid-label').css("border-top-color", "lightgray");
+            $('#contid-label').css("border-bottom-color", "transparent");
+        }
+    });
+
+    $('#contopenid').click(function () {
+        if ($('#contopenid-block').attr('name') == "closed") {
+            $('#contopenid-block').show("slow");
+            $('#contopenid-block').attr("name", "open");
+            $('#contopenid-label').css("border-bottom-color", "lightgray");
+            $('#contopenid-label').css("border-top-color", "transparent");
+        }
+        else {
+            $('#contopenid-block').hide("slow");
+            $('#contopenid-block').attr("name", "closed");
+            $('#contopenid-label').css("border-top-color", "lightgray");
+            $('#contopenid-label').css("border-bottom-color", "transparent");
+        }
+    });
+
+    $('#prodid').click(function () {
+        if ($('#prodid-block').attr('name') == "closed") {
+            $('#prodid-block').show("slow");
+            $('#prodid-block').attr("name", "open");
+            $('#prodid-label').css("border-bottom-color", "lightgray");
+            $('#prodid-label').css("border-top-color", "transparent");
+        }
+        else {
+            $('#prodid-block').hide("slow");
+            $('#prodid-block').attr("name", "closed");
+            $('#prodid-label').css("border-top-color", "lightgray");
+            $('#prodid-label').css("border-bottom-color", "transparent");
+        }
+    });
+</script>

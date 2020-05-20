@@ -1,0 +1,20 @@
+﻿.imageblock {
+    margin: 5% auto;
+}
+
+img {
+    margin: 0 auto;
+}
+
+.text {
+    text-align: center;
+    font-size: 20px;
+    color: lightgray;
+}
+
+.phonenumber {
+    color: white;
+    font-size: 25px;
+    width: 50%;
+    margin: 1% auto;
+}

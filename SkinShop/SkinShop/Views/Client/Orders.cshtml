@@ -1,0 +1,342 @@
+﻿@model SkinShop.Models.ViewModels.OrdersVM
+@using SkinShop.Models.SkinShop
+
+@Styles.Render("~/Content/SkinShopCSS/Orders.css")
+
+<div class="caption gradient-text">З а к а з ы</div>
+
+@if (Model == null || Model.Orders == null || Model.Orders.FirstOrDefault() == null)
+{
+    if (User.IsInRole("manager"))
+    {
+        <div class="orders-text">
+            Заказов пока нет
+        </div>
+    }
+    else
+    {
+        <div class="orders-text">
+            У Вас нет заказов
+        </div>
+    }
+    <div class="toskins-button">
+        <a href="@Url.Action("Index", "Home")" class="btn btn-info">Перейти к скинам</a>
+    </div>
+}
+else
+{
+    <div class="container">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1 filters">
+                @using (Ajax.BeginForm("OrderFilters", new AjaxOptions { UpdateTargetId = "result", LoadingElementId = "loading" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal customform">
+                        <div class="form-group">
+                            <input id="submit" type="submit" value="Применить" class="submit btn btn-success" />
+                            <div class="static">
+                                <div class="search col-md-6 col-sm-12">
+                                    <input type="text" name="searchbyname" class="form-control" onchange="Submit()" placeholder="Поиск" />
+                                </div>
+                                <div class="order col-md-6 col-sm-12">
+                                    @Html.DropDownList("order", new SelectList(new string[] { "По умолчанию", "По алфавиту А-Я (клиент)", "По алфавиту Я-А (клиент)", "По увеличению стоимости", "По уменьшению стоимости", "По увеличению даты", "По убыванию даты" }), new { @class = "form-control customdrop", onchange = "Submit()" })
+                                </div>
+                                <div class="clear-filters">
+                                    <span class="clear" onclick="Reset()"><img src="~/Content/Images/Icons/icons8-очистить-фильтры-100.png" /></span>
+                                </div>
+                            </div>
+                            <div class="filters">
+                                @if (Model.MinPrice != -1 && Model.MaxPrice != -1)
+                                {
+                                    <div class="pricegroup">
+                                        <div class="tag">Стоимость</div>
+                                        <div>
+                                            <div class="input">От: <div class="uah"> uah</div><input name="minPrice" type="number" value="@Model.MinPrice" min="@Model.MinPrice" id="minprice" class="form-control" /></div>
+                                            <div class="input">До: <div class="uah"> uah</div><input name="maxPrice" type="number" value="@Model.MaxPrice" max="@Model.MaxPrice" id="maxprice" class="form-control" /></div>
+                                        </div>
+                                    </div>
+                                }
+                                <div class="statusgroup">
+                                    <div class="tag">Статус</div>
+                                    <input name="status" type="checkbox" value="@OrderStatusDM.Confirmed" id="@OrderStatusDM.Confirmed" onchange="Submit()" /><label for="@OrderStatusDM.Confirmed">@OrderStatusDM.Confirmed</label>
+                                    <input name="status" type="checkbox" value="@OrderStatusDM.Rejected" id="@OrderStatusDM.Rejected" onchange="Submit()" /><label for="@OrderStatusDM.Rejected">@OrderStatusDM.Rejected</label>
+                                    <input name="status" type="checkbox" value="@OrderStatusDM.NotConfirmed" id="@OrderStatusDM.NotConfirmed" onchange="Submit()" /><label for="@OrderStatusDM.NotConfirmed">@OrderStatusDM.NotConfirmed</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                <div id="loading">
+                    <p>Идет загрузка...</p>
+                </div>
+            </div>
+            <div id="result">
+                @foreach (var i in Model.Orders)
+                {
+                    if (User.IsInRole("user") && i.IsDeletedFromUser)
+                    {
+                        <div class="mainblock deleted col-md-10 col-md-offset-1">
+                            <div class="dateblock">
+                                Дата оформления заказа: <span class="date">@i.OrderTime.ToShortDateString()</span>
+                            </div>
+                            <div class="reestablish">
+                                <a href="@Url.Action("ReestablishOrder", "Client", new { id = i.Id})" class="btn">Восстановить</a>
+                            </div>
+                        </div>
+                    }
+                    else if (User.IsInRole("manager") && i.IsDeletedFromEmployee)
+                    {
+                        <div class="mainblock deleted col-md-10 col-md-offset-1">
+                            <div class="dateblock">
+                                Дата оформления заказа: <span class="date">@i.OrderTime.ToShortDateString()</span>
+                            </div>
+                            <div class="reestablish">
+                                <a href="@Url.Action("ReestablishOrder", "Employee", new { id = i.Id})" class="btn">Восстановить</a>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="mainblock col-md-10 col-md-offset-1">
+                            <div class="delete-block">
+                                @if (User.IsInRole("user"))
+                                {
+                                    <a href="@Url.Action("DeleteOrder", "Client", new { id = i.Id})" class="btn btn-danger">X</a>
+                                }
+                                else if (User.IsInRole("manager"))
+                                {
+                                    <a href="@Url.Action("DeleteOrder", "Employee", new { id = i.Id})" class="btn btn-danger">X</a>
+                                }
+                            </div>
+                            @if (i.Client != null)
+                            {
+                                <div class="client col-md-12">
+                                    <a href="@Url.Action("UserInfo", "Account", new { name = i.Client.Email })">
+                                        <div class="clientname">Клиент: @i.Client.Name</div>
+                                        <div class="clientphonenumber">Номер телефона: @i.Client.PhoneNumber</div>
+                                    </a>
+                                </div>
+                            }
+                            <div class="skins col-md-10 col-md-offset-1">
+                                @foreach (var j in i.OrderCounts)
+                                {
+                                    <div class="linkblock">
+                                        @{
+                                            string route = "";
+                                            switch (j.Product.Table)
+                                            {
+                                                case SkinShop.DL.Entities.SkinShop.Goods.Skin:
+                                                    route = "SkinDetails";
+                                                    break;
+                                                case SkinShop.DL.Entities.SkinShop.Goods.Game:
+                                                    route = "GameDetails";
+                                                    break;
+                                                case SkinShop.DL.Entities.SkinShop.Goods.Cloth:
+                                                    route = "ClothDetails";
+                                                    break;
+                                                case SkinShop.DL.Entities.SkinShop.Goods.Computer:
+                                                    route = "ComputerDetails";
+                                                    break;
+                                                case SkinShop.DL.Entities.SkinShop.Goods.ComputerComponent:
+                                                    route = "ComputerComponentDetails";
+                                                    break;
+                                                case SkinShop.DL.Entities.SkinShop.Goods.Container:
+                                                    route = "ContainerDetails";
+                                                    break;
+                                                case SkinShop.DL.Entities.SkinShop.Goods.Other:
+                                                    route = "OtherDetails";
+                                                    break;
+                                            }
+                                        }
+                                        <a href="@Url.Action(route, "Home", new { id = j.Product.Id })" class="linkskin">
+                                            <div class="order-image">
+                                                @if (j.Product.Images.FirstOrDefault() != null)
+                                                {
+                                                    <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(j.Product.Images.FirstOrDefault().Photo))" alt="@j.Product.Images.FirstOrDefault().Text" class="img-responsive imgcustom">
+                                                }
+                                            </div>
+                                            <div class="textskin">
+                                                <div class="nameskin">
+                                                    @j.Product.Name
+                                                </div>
+                                                <div class="price">
+                                                    @if (j.Product.Sale > 0)
+                                                    {
+                                                        <div class="oldprice">@j.Product.Price uah</div>
+                                                        <div class="newprice">@(j.Product.Price - ((j.Product.Price * j.Product.Sale) / 100)) uah</div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="newprice">@j.Product.Price uah</div>
+                                                    }
+                                                </div>
+                                                <div class="characteristics">
+                                                    @if (j.Product.Table == SkinShop.DL.Entities.SkinShop.Goods.Cloth)
+                                                    {
+                                                        <div class="color-block">
+                                                            <div class="color-tag">Цвет:</div>
+                                                            <div class="color" style="background-color: @j.Color.ColorValue"></div><span>@j.Color.Name</span>
+                                                        </div>
+                                                        <div class="color-block">
+                                                            <div class="color-tag">Размер:</div>
+                                                            <span>@j.Size</span>
+                                                        </div>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="count">
+                                                Количество: @j.Count
+                                            </div>
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                            <div class="col-md-12 downblock">
+                                <div class="allprice">
+                                    Общая стоимость: <span class="newprice">@i.Price uah</span>
+                                </div>
+                                <div class="delivery">
+                                    @if (i.Delivery != null)
+                                    {
+                                        <div class="del" onclick="ShowDel(this)" name="@i.Id">
+                                            <span class="tag">Доставка</span><div class="filter-label"></div>
+                                        </div>
+                                            <div id="@i.Id" class="dev-block" hidden name="closed">
+                                                <div class="pay">
+                                                    Оплата: @i.Delivery.PayType
+                                                </div>
+                                                <div class="adress">
+                                                    Адрес доставки: @i.Delivery.DeliveryAddress
+                                                </div>
+                                                <div class="del-type">
+                                                    Тип доставки: @i.Delivery.DeliveryType
+                                                </div>
+                                                <div class="wishes">
+                                                    Пожелания: @i.Delivery.Wishes
+                                                </div>
+                                            </div>
+                                    }
+                                    else if (User.IsInRole("user"))
+                                    {
+                                        <div class="delivery-btn">
+                                            <span>Доставка не оформлена</span><br />
+                                            <a href="@Url.Action("Delivery", "Client", new { orderId = i.Id})" class="btn">Оформить доставку</a>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="delivery-btn">
+                                            <span>Доставка не оформлена</span>
+                                        </div>
+                                    }
+                                </div>
+                                <div class="pay-block">
+                                    @if (i.Delivery != null)
+                                    {
+                                        if (i.IsPayed)
+                                        {
+                                            <div class="payed">
+                                                Заказ оплачен
+                                            </div>
+                                        }
+                                        else if (User.IsInRole("user") && i.Delivery.PayType == "Карта")
+                                        {
+                                            <div class="non-payed">
+                                                <span>Заказ не оплачен</span><br />
+                                                <a href="@Url.Action("Pay", "Client", new { orderId = i.Id})" class="btn">Оплатить заказ</a>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="non-payed">
+                                                <span>Заказ не оплачен</span><br />
+                                                @if (User.IsInRole("manager"))
+                                                {
+                                                    <a href="@Url.Action("Pay", "Employee", new { orderId = i.Id})" class="btn">Заказ оплачен</a>
+                                                }
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                                <div class="dateblock">
+                                    Дата оформления заказа: <span class="date">@i.OrderTime.ToShortDateString()</span>
+                                </div>
+                                <div class="status">
+                                    Статус: <span class="text-info">@i.Status</span>
+                                    <div class="buttons">
+                                        @if (User.IsInRole("manager"))
+                                        {
+                                            <div class="employeeblock">
+                                                @if (i.Status == SkinShop.Models.SkinShop.OrderStatusDM.NotConfirmed)
+                                                {
+                                                    <div class="confirm">
+                                                        <a class="btn btn-success form-control" href="@Url.Action("ConfirmOrder", "Client", new { id = i.EmployeeId })">Подтвердить</a>
+                                                    </div>
+                                                    <div class="reject">
+                                                        <a class="btn btn-danger form-control" href="@Url.Action("Reject", "Client", new { id = i.EmployeeId})">Отклонить</a>
+                                                    </div>
+                                                }
+                                                @if (i.Status == SkinShop.Models.SkinShop.OrderStatusDM.Rejected)
+                                                {
+                                                    <div class="confirm">
+                                                        <a class="btn btn-success form-control" href="@Url.Action("ConfirmOrder", "Client", new { id = i.EmployeeId})">Подтвердить</a>
+                                                    </div>
+                                                }
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    function Reset() {
+        document.getElementById('form0').reset();
+        Submit();
+    }
+
+    function Submit() {
+        $('#submit').click();
+    }
+
+    $('#minprice').change(function (event) {
+        let max = $('#maxprice').val();
+        if (event.target.value > max) {
+            $('#minprice').val(max);
+        }
+        Submit();
+    });
+
+    $('#maxprice').change(function (event) {
+        let min = $('#minprice').val();
+        if (event.target.value < min) {
+            $('#maxprice').val(min);
+        }
+        Submit();
+    });
+
+    function ShowDel(e) {
+        let a = "#";
+        a += e.getAttribute("name");
+        let div = $(a);
+        if (div.attr('name') == "closed") {
+            div.show("slow");
+            div.attr("name", "open");
+            $('.filter-label').css("border-bottom-color", "lightgray");
+            $('.filter-label').css("border-top-color", "transparent");
+            alert(e.val());
+        }
+        else {
+            div.hide("slow");
+            div.attr("name", "closed");
+            $('.filter-label').css("border-top-color", "lightgray");
+            $('.filter-label').css("border-bottom-color", "transparent");
+        }
+    };
+</script>

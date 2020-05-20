@@ -1,0 +1,130 @@
+﻿body {
+    color: lightgray;
+}
+
+.block {
+    max-height: 15em;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.imgcustom {
+    max-height: 180px;
+}
+
+.image {
+    margin: 2% auto;
+    float: left;
+    width: 60% !important;
+}
+
+.deletebutton a {
+    color: lightgray !important;
+    text-decoration: none !important;
+}
+
+.name {
+    text-align: left;
+    padding-left: 10px;
+}
+
+.textblock {
+    margin: 1%;
+    width: 30%;
+    float: left;
+}
+
+.linkcustom {
+    color: lightgray !important;
+    text-decoration: none !important;
+}
+
+.comblock {
+    border: 3px solid gray;
+    border-radius: 5px;
+    float: left;
+    width: 100%;
+    margin: 2% auto;
+}
+
+.countblock {
+    margin: 1% 1%;
+}
+
+.counts {
+    width: 70px;
+}
+
+.deletebutton {
+    text-align: center;
+    width: 100%;
+    float: right;
+    padding: 5px;
+}
+
+.deletebutton input, .deletebutton a {
+    width: 70px !important;
+}
+
+.caption {
+    font-size: 40px;
+    text-align: center;
+    color: lightgray;
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    padding: 20px;
+    margin: 2%;
+    width: 100%;
+}
+
+.gradient-text {
+    font-size: 40px;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, red 33%, #0D61BC 66%, #8AA9D6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #0B2349;
+    display: table;
+    margin: 20px auto;
+    font-weight: bold;
+}
+
+.inputprice {
+    border: none;
+    font-size: 20px;
+    color: green;
+}
+
+.price {
+    float: left;
+}
+
+.orderbutton {
+    margin: 2%;
+}
+
+.basket-text {
+    margin: 2%;
+    width: 50%;
+    font-size: 30px;
+}
+
+.toskins-button {
+    margin: 2%;
+    width: 20%;
+}
+
+.filter {
+    padding-left: 25px;
+    float: left;
+}
+
+.filter-tag {
+    font-size: 18px;
+    padding: 5px 0;
+}
+
+.buttons-block {
+    float: right;
+    width: 25%;
+}

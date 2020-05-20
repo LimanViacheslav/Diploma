@@ -1,0 +1,15 @@
+﻿@Styles.Render("~/Content/SkinShopCSS/SuccessRegister.css")
+
+@if (User.IsInRole("admin"))
+{
+    <div class="text">
+        Менеджер был успешно добавлен
+    </div>
+}
+else
+{ 
+    <div class="text">
+        Спасибо за регистрацию.
+        Хороших Вам покупок
+    </div>
+}

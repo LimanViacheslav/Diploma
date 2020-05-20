@@ -1,0 +1,86 @@
+﻿.blockhere {
+    margin-bottom: 2%;
+    width: 70%;
+    margin: 2% 4%;
+    float: left;
+}
+
+.blockhere:hover {
+    background: rgba(0, 0, 0, 0.5);
+    transform: scale(1.05);
+    transition-duration: .3s;
+    border: 1px solid white;
+}
+
+.text {
+    width: 28%;
+    float: right;
+    margin: 1%;
+}
+
+.count-icons {
+    margin-top: 20px;
+}
+
+.image {
+    float: left;
+    max-width: 70%;
+}
+
+.imgcustom {
+    max-height: 180px;
+    margin: 20px;
+}
+
+.deletebutton {
+    margin: 2%;
+    color: lightgray !important;
+    text-decoration: none !important;
+    width: 120px;
+}
+
+.commonblock {
+    border: 3px solid gray;
+    border-radius: 5px;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.caption {
+    font-size: 40px;
+    text-align: center;
+    color: lightgray;
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    padding: 20px;
+    margin: 2%;
+    width: 100%;
+}
+
+.gradient-text {
+    font-size: 40px;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, red 33%, #0D61BC 66%, #8AA9D6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #0B2349;
+    display: table;
+    margin: 20px auto;
+    font-weight: bold;
+}
+
+.favorite-text {
+    color: lightgray;
+    margin: 2%;
+    width: 40%;
+    font-size: 30px;
+}
+
+.toskins-button {
+    margin: 2%;
+    width: 20%;
+}
+
+.name-fav {
+    font-size: 25px;
+}

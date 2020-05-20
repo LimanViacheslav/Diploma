@@ -1,0 +1,31 @@
+﻿@model List<SkinShop.Models.SkinShop.CommentDM>
+
+@helper BuildComments(IEnumerable<SkinShop.Models.SkinShop.CommentDM> data, int? parentId = 0)
+{
+    var items = data.Where(d => d.ParentCommentId == parentId);
+    if (items.Any())
+    {
+        <div class="messages-block">
+            @foreach (var item in items)
+            {
+                <div class="message">
+                    <div class="comment-assessment">
+                        <img src="~/Content/Images/Icons/icons8-звезда-48.png" class="star" alt="star" /> @item.Assessment
+                    </div>
+                    <div class="comment-date">
+                        @item.CommentDate
+                    </div>
+                    <div class="author">
+                        @item.User.Name
+                    </div>
+                    <div class="comment-text">
+                        @item.Text
+                    </div>
+                    @BuildComments(data, item.Id)
+                </div>
+            }
+        </div>
+    }
+}
+
+@BuildComments(Model)

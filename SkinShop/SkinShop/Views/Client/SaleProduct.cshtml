@@ -1,0 +1,14 @@
+﻿@model SkinShop.BLL.Identity.Infrastructure.OperationDetails
+
+@if(Model.Succedeed)
+{
+    <div class="text-success">
+        @Model.Message
+    </div>
+}
+else 
+{
+    <div class="text-danger">
+        @Model.Message
+    </div>
+}

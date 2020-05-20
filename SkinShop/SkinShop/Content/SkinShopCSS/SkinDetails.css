@@ -1,0 +1,257 @@
+﻿.priceblock {
+    width: 100%;
+    border: 3px solid green;
+    border-radius: 5px;
+    float: right;
+    background-color: none;
+    padding: 1%;
+}
+
+.favorite {
+    float: right;
+    margin: 1%;
+    padding-left: 3%;
+    padding-right: 3%;
+    text-decoration: none;
+    color: gray;
+    font-size: 18px;
+    border: 3px solid gray;
+}
+
+    .favorite:hover {
+        color: #FFBE00;
+        transform: scale(1.05);
+        border-color: #FFBE00;
+        transition-duration: 0.3s;
+        background-color: #E4CE8E;
+    }
+
+.basket {
+    font-size: 18px;
+    margin: 1%;
+    float: right;
+    color: gray;
+    border: 3px solid gray;
+    text-decoration: none;
+}
+
+.basket:hover {
+    color: green;
+    border-color: green;
+    transform: scale(1.05);
+    transition-duration: 0.3s;
+    background-color: lightgreen;
+}
+
+.text {
+    font-size: 16px;
+    color: lightgray;
+}
+
+.item {
+    color: gray !important;
+}
+
+.characteristics {
+    width: 100%;
+    border: 2px solid white;
+    margin-top: 2%;
+    padding: 2%;
+    float: right;
+    border-radius: 5px;
+}
+
+.already {
+    border: 3px solid gray;
+    color:  gray;
+    border-radius: 5px;
+    float: right;
+    padding: 2%;
+    font-size: 18px;
+    margin: 1%;
+}
+
+.hide {
+    display: none;
+}
+
+.image {
+    min-height: 7em;
+    max-height: 10em;
+}
+
+.caption {
+    font-size: 40px;
+    text-align: center;
+    color: lightgray;
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    padding: 20px;
+    margin: 2%;
+    width: 100%;
+}
+
+.gradient-text {
+    font-family: 'Bauhaus 93';
+    text-transform: uppercase;
+    background: linear-gradient(45deg, red 33%, #0D61BC 66%, #8AA9D6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #0B2349;
+    display: table;
+    margin: 20px auto;
+}
+
+.gamename {
+    text-align: center;
+    font-size: 22px;
+    padding: 10px;
+    width: 100%;
+    float: left;
+}
+
+.gamelink {
+    color: lightgray !important;
+    text-decoration: none !important;
+}
+
+.gamelink:hover {
+    color: mediumpurple !important;
+    transition: .3s;
+    font-size: 24px;
+}
+
+.gamecaption {
+    float: left;
+    font-size: 22px;
+    text-align: left;
+    color: lightgray;
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    padding: 20px;
+    margin: 2% 0;
+    width: 100%;
+}
+
+.block {
+    height: 24em !important;
+    margin-bottom: 2%;
+}
+
+.price-main {
+    padding-left: 20px;
+    font-size: 25px !important;
+}
+
+.icons-block {
+    text-align: center;
+    color: lightgray;
+    font-size: 22px;
+}
+
+.producticon {
+    width: 35px;
+}
+
+.newpricel {
+    color: green;
+    font-size: 30px;
+}
+
+.messages-block {
+    color: lightgray;
+    font-size: 18px;
+}
+
+.message {
+    width: 80%;
+    margin: 10px 10%;
+    padding: 10px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    float: left;
+}
+
+.comment-assessment {
+    float: left;
+    width: 100%;
+    padding-left: 13px;
+}
+
+.comment-date {
+    margin-right: 15px;
+    float: right;
+    text-align: right;
+}
+
+.author {
+    float: left;
+    font-weight: bold;
+    font-size: 25px;
+    padding-left: 15px;
+}
+
+.comment-text {
+    width: 100%;
+    padding: 5px 70px;
+    float: left;
+}
+
+.assessment {
+    width: 50px;
+}
+
+.comment-body {
+    width: 30%;
+    margin: 10px auto;
+}
+
+.text {
+    margin: 10px 0;
+}
+
+.assessment-rezult {
+    font-size: 20px;
+    color: lightgray;
+    margin: 10px auto;
+}
+
+.sale-details {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+}
+
+.sale-details img {
+    width: 120px;
+}
+
+.new-details {
+    position: absolute;
+    top: 20px;
+    left: 40px;
+}
+
+.new-details img {
+    width: 150px;
+}
+
+.sale-other {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+}
+
+.sale-other img {
+    width: 70px;
+}
+
+.new-other {
+    position: absolute;
+    top: 10px;
+    left: 25px;
+}
+
+.new-other img {
+    width: 80px;
+}

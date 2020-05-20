@@ -1,0 +1,302 @@
+﻿@model SkinShop.Models.ViewModels.ComputersVM
+
+@using SkinShop.Helpers
+@Styles.Render("~/Content/SkinShopCSS/Index.css")
+<div class="caption gradient-text" id="skin">С к и н  ы</div>
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-10 col-xs-offset-1 col-sm-offset-0">
+            @if (User.IsInRole("admin"))
+            {
+                <a class="btn btn-info add" href="@Url.Action("CreateComputer", "Admin")">Добавить компьютер</a>
+            }
+        </div>
+        <div class="col-md-12 col-xs-12">
+            @using (Ajax.BeginForm("ComputerFilters", new AjaxOptions { UpdateTargetId = "result", LoadingElementId = "loading" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal customform">
+                    <div class="form-group">
+                        <input id="submit" type="submit" value="Применить" class="submit btn btn-success" />
+                        <div class="static">
+                            <div class="search col-md-6 col-sm-12">
+                                <input type="text" name="searchbyname" class="form-control" onchange="Submit()" placeholder="Поиск" />
+                            </div>
+                            <div class="order col-md-6 col-sm-12">
+                                @Html.DropDownList("order", new SelectList(new string[] { "По умолчанию", "По алфавиту А-Я", "По алфавиту Я-А", "По увеличению стоимости", "По уменьшению стоимости", "По популярности", "По рейтингу", "По заказам" }), new { @class = "form-control customdrop", onchange = "Submit()" })
+                            </div>
+                            <div class="clear-filters">
+                                <span class="clear" onclick="Reset()"><img src="~/Content/Images/Icons/icons8-очистить-фильтры-100.png" /></span>
+                                <div class="filter-button">
+                                    <img src="~/Content/Images/Icons/icons8-фильтр-100.png" /> <div class="filter-label"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="filters" name="closed" hidden>
+                            @if (Model.MinPrice != -1 && Model.MaxPrice != -1)
+                            {
+                                <div class="pricegroup">
+                                    <div class="tag tag-price">Стоимость</div>
+                                    <div>
+                                        <div class="input">От:<input name="minPrice" type="number" value="@Model.MinPrice" min="@Model.MinPrice" id="minprice" class="form-control" /><div class="uah"> uah</div></div>
+                                        <div class="input">До:<input name="maxPrice" type="number" value="@Model.MaxPrice" max="@Model.MaxPrice" id="maxprice" class="form-control" /><div class="uah"> uah</div></div>
+                                    </div>
+                                </div>
+                            }
+                            @if (Model.MotherBoards != null)
+                            {
+                                <div class="checkboxgroup">
+                                    <div class="tag">Материнская плата</div><br />
+                                    @foreach (var i in Model.MotherBoards)
+                                    {
+                                        <div class="checkbox-block">
+                                            <input type="checkbox" value="@i" id="@i" name="motherBoards" class="checkbox checkbox-inline forgame" onchange="Submit()" />
+                                            <label for="@i">@i</label><br />
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            @if (Model.PowerSupplies != null)
+                            {
+                                <div class="checkboxgroup">
+                                    <div class="tag">Блок питания</div><br />
+                                    @foreach (var i in Model.PowerSupplies)
+                                    {
+                                        <div class="checkbox-block">
+                                            <input type="checkbox" value="@i" id="@i" name="powerSupplies" class="checkbox checkbox-inline forgame" onchange="Submit()" />
+                                            <label for="@i">@i</label><br />
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            @if (Model.Processors != null)
+                            {
+                                <div class="checkboxgroup">
+                                    <div class="tag">Процессоры</div><br />
+                                    @foreach (var i in Model.Processors)
+                                    {
+                                        <div class="checkbox-block">
+                                            <input type="checkbox" value="@i" id="@i" name="processors" class="checkbox checkbox-inline forgame" onchange="Submit()" />
+                                            <label for="@i">@i</label><br />
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            @if (Model.RAMs != null)
+                            {
+                                <div class="checkboxgroup">
+                                    <div class="tag">Оперативная память</div><br />
+                                    @foreach (var i in Model.RAMs)
+                                    {
+                                        <div class="checkbox-block">
+                                            <input type="checkbox" value="@i" id="@i" name="rams" class="checkbox checkbox-inline forgame" onchange="Submit()" />
+                                            <label for="@i">@i</label><br />
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            @if (Model.ROMs != null)
+                            {
+                                <div class="checkboxgroup">
+                                    <div class="tag">Постоянная память</div><br />
+                                    @foreach (var i in Model.ROMs)
+                                    {
+                                        <div class="checkbox-block">
+                                            <input type="checkbox" value="@i" id="@i" name="roms" class="checkbox checkbox-inline forgame" onchange="Submit()" />
+                                            <label for="@i">@i</label><br />
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            @if (Model.SystemBlocks != null)
+                            {
+                                <div class="checkboxgroup">
+                                    <div class="tag">Корпус</div><br />
+                                    @foreach (var i in Model.SystemBlocks)
+                                    {
+                                        <div class="checkbox-block">
+                                            <input type="checkbox" value="@i" id="@i" name="systemBlocks" class="checkbox checkbox-inline forgame" onchange="Submit()" />
+                                            <label for="@i">@i</label><br />
+                                        </div>
+                                    }
+                                </div>
+                            }
+                            @if (Model.VideoCards != null)
+                            {
+                                <div class="checkboxgroup">
+                                    <div class="tag">Видеокарта</div><br />
+                                    @foreach (var i in Model.VideoCards)
+                                    {
+                                        <div class="checkbox-block">
+                                            <input type="checkbox" value="@i" id="@i" name="videoCards" class="checkbox checkbox-inline forgame" onchange="Submit()" />
+                                            <label for="@i">@i</label><br />
+                                        </div>
+                                    }
+                                </div>
+                            }
+                                <input type="number" id="page" name="page" />
+                            </div>
+                        </div>
+                    </div>
+            }
+        </div>
+        <div class="col-md-12 col-xs-12 col-xs-offset-1 col-sm-offset-0">
+            <div id="loading">
+                <p>Идет загрузка...</p>
+            </div>
+            <div id="result" class="row">
+                @if (Model != null)
+                {
+                    foreach (var i in Model.Computers)
+                    {
+                        <div class="col-md-4 col-xs-10 col-sm-6 block">
+                            @if (User.IsInRole("admin"))
+                            {
+                                <div class="deleteskin">
+                                    @Ajax.ActionLink("Удалить", "DeleteComputer", "Admin", new { id = i.Id }, new AjaxOptions { LoadingElementId = "loading" }, new { @class = "btn btn-danger" })
+                                </div>
+                                <div class="update">
+                                    <a href="@Url.Action("UpdateComputer", "Admin", new { id = i.Id})" class="btn btn-info">Изменить</a>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="pseudo"></div>
+                            }
+                            <a href="@Url.Action("ComputerDetails", "Home", new { id = i.Id })" class="link">
+                                <div class="image">
+                                    @if (i.Images.FirstOrDefault() != null)
+                                    {
+                                        <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(i.Images.FirstOrDefault().Photo))" alt="@i.Images.FirstOrDefault().Text" class="img-responsive imgcustom">
+                                    }
+                                </div>
+                                @if (i.Sale > 0)
+                                {
+                                    <div class="sale">
+                                        <img src="~/Content/Images/Sale.png" alt="sale" />
+                                    </div>
+                                }
+                                @if ((DateTime.Now - i.DateOfAdded).Days < 7)
+                                {
+                                    <div class="new">
+                                        <img src="~/Content/Images/new.png" alt="new" />
+                                    </div>
+                                }
+                                <div class="text">
+                                    <div class="name">
+                                        @i.Name
+                                    </div>
+                                    <div class="price">
+                                        @if (i.Sale > 0)
+                                        {
+                                            <div class="oldprice">@i.Price uah</div>
+                                            <div class="newprice">@(i.Price - ((i.Price * i.Sale) / 100)) uah</div>
+                                        }
+                                        else
+                                        {
+                                            <div class="newprice">@i.Price uah</div>
+                                        }
+                                    </div>
+                                    <div class="characteristics">
+                                        <div>
+                                            <img src="~/Content/Images/Icons/icons8-показать-50.png" alt="show" class="producticon" />@i.CountSeen
+                                            <img src="~/Content/Images/Icons/icons8-корзина-50.png" alt="show" class="producticon" />@i.CountOrders
+                                            <img src="~/Content/Images/Icons/icons8-сердце-50.png" alt="show" class="producticon" />@i.CountFavorites
+                                        </div>
+                                        <div class="assessment-rezult">
+                                            @if (i.Comments.Any())
+                                            {
+                                                <div>
+                                                    <img src="~/Content/Images/Icons/icons8-звезда-48.png" class="star" alt="star" />
+                                                    @Math.Round(Convert.ToDouble(i.Comments.Sum(x => x.Assessment)) / Convert.ToDouble(i.Comments.Count), 1)
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div>
+                                                    <img src="~/Content/Images/Icons/icons8-звезда-48.png" class="star" alt="star" />
+                                                    0
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    }
+                }
+                <div class="btn-group custom">
+                    @for (int i = 1; i <= Model.PageInfo.TotalPages; i++)
+                    {
+                        if (i == Model.PageInfo.PageNumber)
+                        {
+                            <button id="@i" name="@i" value="@i" class="button btn btn-info active pagin">@i</button>
+                        }
+                        else
+                        {
+                            <button id="@i" name="@i" value="@i" class="button btn btn-default pagin">@i</button>
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function Reset() {
+        document.getElementById('form0').reset();
+        $('.forgame').removeAttr("checked");
+        $('#forcheked').val("");
+        $('.filters').hide("slow");
+        $('.filters').attr("name", "closed");
+        $('.filter-label').css("border-top-color", "lightgray");
+        $('.filter-label').css("border-bottom-color", "transparent");
+        Submit();
+    }
+
+    function Submit() {
+        $('body,html').animate({ scrollTop: 0 }, 800);
+        $('#page').val("1")
+        $('#submit').click();
+    }
+
+    $('.button').click(function (event) {
+        $('#page').val(event.target.value)
+        $('#submit').click();
+    })
+
+    $('#minprice').change(function (event) {
+        let max = $('#maxprice').val();
+        if (event.target.value > max) {
+            $('#minprice').val(max - 1);
+        }
+        Submit();
+    });
+
+    $('#maxprice').change(function (event) {
+        let min = $('#minprice').val();
+        if (event.target.value < min) {
+            $('#maxprice').val(min + 1);
+        }
+        Submit();
+    });
+
+    $('.pagin').click(function (event) {
+        $('body,html').animate({ scrollTop: 0 }, 800);
+    });
+
+    $('.filter-button').click(function () {
+        if ($('.filters').attr('name') == "closed") {
+            $('.filters').show("slow");
+            $('.filters').attr("name", "open");
+            $('.filter-label').css("border-bottom-color", "lightgray");
+            $('.filter-label').css("border-top-color","transparent");
+        }
+        else {
+            $('.filters').hide("slow");
+            $('.filters').attr("name", "closed");
+            $('.filter-label').css("border-top-color", "lightgray");
+            $('.filter-label').css("border-bottom-color", "transparent");
+        }
+    });
+</script>

@@ -1,0 +1,234 @@
+﻿.main {
+    color: lightgray;
+}
+
+.logotext {
+    margin: 2%;
+    text-align: center;
+    font-family: 'Bauhaus 93'; 
+}
+
+@import url(https://fonts.googleapis.com/css?family=Rubik+One&subset=latin,cyrillic);
+
+.gradient-text {
+    font-size: 60px;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, red 33%, #0D61BC 66%, #8AA9D6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #0B2349;
+    display: table;
+    margin: 20px auto;
+}
+
+.picture {
+    background-size: cover;
+    background-repeat: no-repeat;
+    float: right;
+    width: 100%;
+}
+
+.cs {
+    background-image: url("../Images/new_smm_5_rus.jpg");
+}
+
+.dota {
+    background-image: url("../Images/dota2Logo.jpeg");
+}
+
+.knifes {
+    background-image: url("../Images/knifes.jpg");
+}
+
+.fortnite {
+    background-image: url("../Images/fortniteLogo.jpg");
+}
+
+.hots {
+    background-image: url("../Images/hotslogo.jpg");
+}
+
+.overwatch {
+    background-image: url("../Images/overwatchLogo.jpg");
+}
+
+.pubg {
+    background-image: url("../Images/pubglogo.jpg");
+}
+
+.csgo {
+    background-image: url("../Images/csgologo.jpg");
+}
+
+.knifescsgo {
+    background-image: url("../Images/csgoknifes.jpg");
+}
+
+.contain1 {
+    padding: 20px;
+    font-size: 55px;
+    width: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    float: right;
+}
+
+@media (max-width: 600px) {
+    .contain1 {
+        width: 60%;
+        font-size: 30px;
+    }
+}
+
+.contain2 {
+    padding: 20px;
+    font-size: 55px;
+    width: 50%;
+    background: rgba(0, 0, 0, 0.7);
+    float: left;
+}
+
+.prooves {
+    width: 100%;
+    margin-top: 4%;
+}
+
+.ak {
+    background-image: url("../Images/ak47logo.png");
+}
+
+.aug {
+    background-image: url("../Images/auglogo.png");
+}
+
+.awp {
+    background-image: url("../Images/awplogo.png");
+}
+
+.knife {
+    background-image: url("../Images/knifelogo.png");
+}
+
+.m4 {
+    background-image: url("../Images/m4logo.png");
+}
+
+.usp {
+    background-image: url("../Images/usplogo.png");
+}
+
+.proofblock {
+    width: 30%;
+    margin-left: 3%;
+    margin-top: 1%;
+    background-size: cover;
+    background-repeat: no-repeat;
+    float: left;
+    height: 300px;
+    position: relative;
+}
+
+.contain {
+    float: right;
+    width: 100%;
+    font-size: 30px;
+    position: absolute;
+    bottom: 2%;
+    background: rgba(0, 0, 0, 0.7);
+}
+
+@media (max-width: 600px) {
+    .contain2 {
+        width: 60%;
+        font-size: 30px;
+    }
+
+    .proofblock {
+        width: 100%;
+    }
+}
+
+.gameblock {
+    float: left;
+    width: 30%;
+    margin-left: 3%;
+    height: 25em;
+}
+
+.games {
+    width: 100%;
+    float: left;
+    margin-top: 5%;
+    margin-bottom: 30px;
+}
+
+.gameblock a {
+    text-decoration: none !important;
+    color: lightgray;
+}
+
+.gamename {
+    font-size: 20px;
+    text-align: center;
+}
+
+.gameinfo {
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+
+.gameblock:hover {
+    background: rgba(0, 0, 0, 0.5);
+    transition: .3s;
+    transform: scale(1.05);
+    border: 1px solid white;
+}
+
+.caption {
+    font-size: 40px;
+    text-align: center;
+    color: lightgray;
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    padding: 20px;
+    margin: 2%;
+    width: 100%;
+}
+
+.gradient-text {
+    font-size: 40px;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, red 33%, #0D61BC 66%, #8AA9D6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #0B2349;
+    display: table;
+    margin: 20px auto;
+    font-weight: bold;
+}
+
+footer {
+    float: left;
+    width: 100%;
+}
+
+.deletelink {
+    float: right;
+    margin: 2%;
+}
+
+.deletelink a {
+    font-size: 15px !important;
+}
+
+.update {
+    float: right;
+    margin: 2%;
+}
+
+.update a {
+        font-size: 15px !important;
+}
+
+.gameimage {
+    max-height: 18em;
+}

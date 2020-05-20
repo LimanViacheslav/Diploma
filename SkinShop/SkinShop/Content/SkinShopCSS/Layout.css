@@ -1,0 +1,93 @@
+﻿@font-face {
+    font-family: 'Gilroy Ultra Light';
+    src: url('Gilroy-UltraLight.eot');
+    src: url('Gilroy-UltraLight.eot?#iefix') format('embedded-opentype'), url('Gilroy-UltraLight.woff') format('woff'), url('Gilroy-UltraLight.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+.main {
+    font-family: 'Oswald';
+    background-image: url("../Images/background.jpg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+}
+
+footer {
+    color: gray;
+    border-top: 2px solid lightgray;
+    padding-top: 10px;
+    float: left;
+    width: 100%;
+}
+
+.nav {
+    font-size: 17px;
+}
+
+.right {
+    display: block;
+    float: right;
+}
+
+.container li, .navbar-brand {
+    font-size: 20px !important;
+}
+
+.copyright {
+    float: left;
+    margin-left: 5%;
+}
+
+.icons {
+    text-align: center;
+    float: right;
+    margin-right: 5%;
+    width: 270px;
+}
+
+.captionicons {
+    color: lightgray;
+}
+
+.iconblock {
+    float: right;
+    margin: 1%;
+    background-color: dimgray;
+    border-radius: 5px;
+}
+
+.iconblock:hover {
+    transition: .3s;
+    transform: scale(1.05);
+    background-color: lightgray;
+}
+
+a:active {
+    background-color: lightgray;
+}
+
+.dropdown-menu {
+    background-color: black;
+}
+
+.dropdown-item {
+    font-size: 20px;
+    color: darkgray;
+    padding-left: 10px;
+}
+
+.dropdown-item:hover {
+    color: lightgray;
+    text-decoration: none;
+}
+
+.dropdown-item:active {
+    color: lightgray;
+    background-color: black;
+}
+
+.logo {
+    width: 100px;
+}

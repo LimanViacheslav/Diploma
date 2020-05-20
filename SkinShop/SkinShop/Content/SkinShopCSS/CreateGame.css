@@ -1,0 +1,66 @@
+﻿.caption {
+    font-size: 40px;
+    text-align: center;
+    color: lightgray;
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    padding: 20px;
+    margin: 2%;
+    width: 100%;
+}
+
+.gradient-text {
+    font-size: 40px;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, red 33%, #0D61BC 66%, #8AA9D6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #0B2349;
+    display: table;
+    margin: 20px auto;
+    font-weight: bold;
+}
+
+.imgblock, .imgtext {
+    width: 50%;
+    margin: 2% 10%; 
+}
+
+.imgtext {
+    color: lightgray;
+    font-size: 18px;
+}
+
+.img-block {
+    width: 100%;
+    float: left;
+}
+
+.img {
+    width: 400px;
+    margin: 0 auto;
+}
+
+.text-block {
+    text-align: center;
+    color: darkseagreen;
+    padding: 10px;
+    font-size: 30px;
+}
+
+.link-body {
+    width: 80px;
+    margin: 10px auto;
+}
+
+.link-body .btn {
+    color: darkgray;
+    border: 1px solid gray;
+    width: 80px;
+    margin-top: 10px;
+}
+
+.link-body .btn:hover {
+    color: lightgray;
+    background-color: darkgray;
+}

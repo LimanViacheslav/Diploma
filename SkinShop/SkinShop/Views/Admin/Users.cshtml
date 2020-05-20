@@ -1,0 +1,84 @@
+﻿@model List<SkinShop.Models.Account.UserDM>
+
+@{
+    ViewBag.Title = "Users";
+}
+
+@Styles.Render("~/Content/SkinShopCSS/Users.css")
+
+<div class="caption gradient-text">П о л ь з о в а т е л и</div>
+
+@using (Ajax.BeginForm("UserFilters", new AjaxOptions { UpdateTargetId = "result", LoadingElementId = "loading" }))
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal customform">
+        <div class="form-group">
+            <input id="submit" type="submit" value="Применить" class="submit btn btn-success" />
+            <input type="button" value="Очистить" class="clear btn btn-info" onclick="Reset()" />
+            <div class="search">
+                @Html.Label("Поиск", htmlAttributes: new { @class = "control-label" })
+                <input type="text" name="userName" class="form-control" onchange="Submit()" />
+            </div>
+                <div class="rolesgroup">
+                    <div class="tag">Роли</div>
+                    <input name="roles" type="checkbox" value="user" id="user" onchange="Submit()" /><label for="user">Пользователь</label>
+                    <input name="roles" type="checkbox" value="manager" id="manager" onchange="Submit()" /><label for="manager">Менеджер</label>
+                </div>
+        </div>
+    </div>
+}
+
+<a class="btn btn-info custombtn" href="@Url.Action("Register", "Account")">Добавить менеджера</a>
+
+<div id="loading">
+    <p>Идет загрузка...</p>
+</div>
+
+<table id="result" class="table table-responsive">
+    <tr>
+        <th>Имя пользователя</th>
+        <th>Номер телефона</th>
+        <th>Электронная почта</th>
+        <th>Роль</th>
+        <th></th>
+    </tr>
+    @foreach (var i in Model)
+    {
+        <tr>
+            <td>@i.Name (@i.UserName)</td>
+            <td>@i.PhoneNumber</td>
+            <td>@i.Email</td>
+            <td>
+                @if (i.Role == "user")
+                {
+                <span class="user role">Пользователь</span>
+                }
+                @if (i.Role == "manager")
+                {
+                <span class="manager role">Менеджер</span>
+                }
+            </td>
+            <td>
+                @if (i.IsBanned)
+                {
+                    <a class="btn btn-success" href="@Url.Action("Unban", "Admin", new { id = i.Id})">Разбанить</a>
+                }
+                else
+                {
+                    <a class="btn btn-danger" href="@Url.Action("Ban", "Admin", new { id = i.Id})">Забанить</a>
+                }
+            </td>
+        </tr>
+    }
+</table>
+
+<script type="text/javascript">
+    function Reset() {
+        document.getElementById('form0').reset();
+        Submit();
+    }
+
+    function Submit() {
+        $('#submit').click();
+    }
+</script>

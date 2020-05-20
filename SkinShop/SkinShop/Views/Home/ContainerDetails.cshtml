@@ -1,0 +1,320 @@
+﻿@model SkinShop.Models.ViewModels.ContainerDetailsVM
+
+@helper BuildComments(IEnumerable<SkinShop.Models.SkinShop.CommentDM> data, int? parentId = 0)
+{
+    var items = data.Where(d => d.ParentCommentId == parentId);
+    if (items.Any())
+    {
+        <div class="messages-block">
+            @foreach (var item in items)
+            {
+                <div class="message">
+                    <div class="comment-assessment">
+                        <img src="~/Content/Images/Icons/icons8-звезда-48.png" class="star" alt="star" /> @item.Assessment
+                    </div>
+                    <div class="comment-date">
+                        @item.CommentDate.ToShortDateString() <br />
+                        @item.CommentDate.ToShortTimeString()
+                    </div>
+                    <div class="author">
+                        @item.User.Name
+                    </div>
+                    <div class="comment-text">
+                        @item.Text
+                    </div>
+                    @BuildComments(data, item.Id)
+                </div>
+            }
+        </div>
+    }
+}
+
+@{
+    ViewBag.Title = "ContainerDetails";
+    int j = 1;
+}
+@Styles.Render("~/Content/SkinShopCSS/GameDetails.css")
+
+<div class="caption gradient-text">@Model.Container.Name</div>
+<div id="lol" class="lol">
+</div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-xs-12 col-sm-12">
+            <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(Model.Product.Images.FirstOrDefault().Photo))" alt="@Model.Product.Images.FirstOrDefault().Text" class="img-responsive imgcustom">
+            @if (Model.Product.Sale > 0)
+            {
+                <div class="sale-details">
+                    <img src="~/Content/Images/Sale.png" alt="sale" />
+                </div>
+            }
+            @if ((DateTime.Now - Model.Product.DateOfAdded).Days < 7)
+            {
+                <div class="new-details">
+                    <img src="~/Content/Images/new.png" alt="new" />
+                </div>
+            }
+        </div>
+        <div class="col-md-4 col-md-offset-0 col-xs-10 col-xs-offset-1 col-sm-10 col-sm-offset-1">
+            <div class="row">
+                <div class="priceblock col-md-12">
+                    <div class="icons-block">
+                        <img src="~/Content/Images/Icons/icons8-показать-50.png" alt="showl" class="producticon" />@Model.Product.CountSeen
+                        <img src="~/Content/Images/Icons/icons8-коробка-64.png" alt="showl" class="producticon" />@Model.Product.CountOrders
+                        <img src="~/Content/Images/Icons/icons8-сердце-50.png" alt="showl" class="producticon" />@Model.Product.CountFavorites
+                    </div>
+                    <div class="assessment-rezult">
+                        @if (Model.Product.Comments.Any())
+                        {
+                            <div>
+                                <img src="~/Content/Images/Icons/icons8-звезда-48.png" class="star" alt="star" />
+                                @Math.Round(Convert.ToDouble(Model.Product.Comments.Sum(x => x.Assessment)) / Convert.ToDouble(Model.Product.Comments.Count), 1)
+                            </div>
+                        }
+                        else
+                        {
+                            <div>
+                                <img src="~/Content/Images/Icons/icons8-звезда-48.png" class="star" alt="star" />
+                                0
+                            </div>
+                        }
+                    </div>
+                    <div class="price-main">
+                        @if (Model.Product.Sale > 0)
+                        {
+                            <div class="oldprice">@Model.Product.Price uah</div>
+                            <div class="newpricel">@(Model.Product.Price - ((Model.Product.Price * Model.Product.Sale) / 100)) uah</div>
+                        }
+                        else
+                        {
+                            <div class="newpricel">@Model.Product.Price uah</div>
+                        }
+                    </div>
+                    @if (User.IsInRole("user"))
+                    {
+                        <div class="buttons">
+                            @if (!Model.IsContainerAlreadyInFavorites)
+                            {
+                                <a class="btn favorite" href="@Url.Action("AddToFavorite", "Client", new { skinid = Model.Product.Id})">
+                                    <span class="glyphicon glyphicon-heart-empty"></span>
+                                </a>
+                            }
+                            <a class="btn basket" id="buy">
+                                Купить
+                            </a>
+                            <div class="case-count">
+                                <input id="count" type="number" max="10" min="1" value="1" class="form-control cont-count" />
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="characteristics col-md-12">
+                    <div>
+                        <span class="item"><span class="glyphicon glyphicon-record"></span> Тип: </span> @Model.Container.Type
+                    </div>
+                    <div>
+                        <div class="before-block">
+                            <span class="item"><span class="glyphicon glyphicon-record"></span> Описание:</span>
+                            @if (Model.Product.Description == null || Model.Product.Description == "")
+                            {
+                                <span>-</span>
+                            }
+                            else
+                            {
+                                @Model.Product.Description
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-12">
+        @if (Model.Container.Products != null && Model.Container.Products.Any())
+        {
+            <div class="gamecaption">
+                Из контейнера может выпасть
+            </div>
+            foreach (var i in Model.Container.Products)
+            {
+            <div class="col-md-3 block block-inner">
+                @{
+                    string route = "";
+                    switch (i.Table)
+                    {
+                        case SkinShop.DL.Entities.SkinShop.Goods.Skin:
+                            route = "SkinDetails";
+                            break;
+                        case SkinShop.DL.Entities.SkinShop.Goods.Game:
+                            route = "GameDetails";
+                            break;
+                        case SkinShop.DL.Entities.SkinShop.Goods.Cloth:
+                            route = "ClothDetails";
+                            break;
+                        case SkinShop.DL.Entities.SkinShop.Goods.Computer:
+                            route = "ComputerDetails";
+                            break;
+                        case SkinShop.DL.Entities.SkinShop.Goods.ComputerComponent:
+                            route = "ComputerComponentDetails";
+                            break;
+                        case SkinShop.DL.Entities.SkinShop.Goods.Container:
+                            route = "ContainerDetails";
+                            break;
+                        case SkinShop.DL.Entities.SkinShop.Goods.Other:
+                            route = "OtherDetails";
+                            break;
+                    }
+                }
+                <a href="@Url.Action(route, "Home", new { id = i.Id })" class="link">
+                    <div class="image">
+                        @if (i.Images.FirstOrDefault() != null)
+                        {
+                            <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(i.Images.FirstOrDefault().Photo))" alt="@i.Images.FirstOrDefault().Text" class="img-responsive imgcustom">
+                        }
+                    </div>
+                    <div class="descriptiontext">
+                        <div class="names">
+                            @i.Name
+                        </div>
+                        <div class="price">
+                            @if (i.Sale > 0)
+                            {
+                                <div class="oldprice">@i.Price uah</div>
+                                <div class="newprice">@(i.Price - ((i.Price * i.Sale) / 100)) uah</div>
+                            }
+                            else
+                            {
+                                <div class="newprice">@i.Price uah</div>
+                            }
+                        </div>
+                    </div>
+                </a>
+            </div>
+            }
+        }
+    </div>
+    <div class="col-md-12">
+        @if (Model.OtherContainers != null && Model.OtherContainers.Any())
+        {
+            <div class="gamecaption">
+                Другие вещи
+            </div>
+            foreach (var i in Model.OtherContainers)
+            {
+                if (j == 5)
+                {
+                    break;
+                }
+                <div class="col-md-3 col-xs-10 col-sm-6 block">
+                    <a href="@Url.Action("ContainerDetails", "Home", new { id = i.Id })" class="link">
+                        <div class="image">
+                            @if (i.Images.FirstOrDefault() != null)
+                            {
+                                <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(i.Images.FirstOrDefault().Photo))" alt="@i.Images.FirstOrDefault().Text" class="img-responsive imgcustom">
+                            }
+                            @if (i.Sale > 0)
+                            {
+                                <div class="sale-other">
+                                    <img src="~/Content/Images/Sale.png" alt="sale" />
+                                </div>
+                            }
+                            @if ((DateTime.Now - i.DateOfAdded).Days < 7)
+                            {
+                                <div class="new-other">
+                                    <img src="~/Content/Images/new.png" alt="new" />
+                                </div>
+                            }
+                        </div>
+                        <div class="descriptiontext">
+                            <div class="name">
+                                @i.Name
+                            </div>
+                            <div class="price">
+                                @if (i.Sale > 0)
+                                {
+                                    <div class="oldprice">@i.Price uah</div>
+                                    <div class="newprice">@(i.Price - ((i.Price * i.Sale) / 100)) uah</div>
+                                }
+                                else
+                                {
+                                    <div class="newprice">@i.Price uah</div>
+                                }
+                            </div>
+                            <div>
+                                <div>
+                                    <img src="~/Content/Images/Icons/icons8-показать-50.png" alt="show" class="producticon" />@i.CountSeen
+                                    <img src="~/Content/Images/Icons/icons8-корзина-50.png" alt="show" class="producticon" />@i.CountOrders
+                                    <img src="~/Content/Images/Icons/icons8-сердце-50.png" alt="show" class="producticon" />@i.CountFavorites
+                                </div>
+                                <div class="assessment-rezult">
+                                    @if (i.Comments != null && i.Comments.FirstOrDefault() != null && i.Comments.Any())
+                                    {
+                                        <div>
+                                            <img src="~/Content/Images/Icons/icons8-звезда-48.png" class="star" alt="star" />
+                                            @Math.Round(Convert.ToDouble(i.Comments.Sum(x => x.Assessment)) / Convert.ToDouble(i.Comments.Count), 1)
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div>
+                                            <img src="~/Content/Images/Icons/icons8-звезда-48.png" class="star" alt="star" />
+                                            0
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="hide">@(j++)</div>
+            }
+        }
+    </div>
+</div>
+<div class="row">
+    <div class="gamecaption">
+        Комментарии
+    </div>
+    @if (User.IsInRole("user"))
+    {
+        using (Ajax.BeginForm("WriteComment", "Client", new AjaxOptions { UpdateTargetId = "result" }))
+        {
+            @Html.AntiForgeryToken()
+            <div class="form-horizontal">
+                <div class="form-group">
+                    <input name="productId" type="text" value="@Model.Product.Id" hidden />
+                    <input name="route" type="text" value="SkinDetails" hidden />
+                    <div class="form-body comment-body">
+                        <div class="assessment">
+                            Оценка:
+                            <input name="assessment" min="0" max="5" type="number" class="form-control" required />
+                        </div>
+                        <div class="text">
+                            <textarea name="text" placeholder="Ввведите текст сообщения..." class="form-control" required></textarea>
+                        </div>
+                        <input id="submit" type="submit" name="Добавить" class="btn btn-success" />
+                    </div>
+                </div>
+            </div>
+        }
+    }
+    <div id="result">
+        @if (Model.Product.Comments == null || Model.Product.Comments.FirstOrDefault() == null)
+        {
+            <div class="comments-null">Коментраии пока отсутсвуют</div>
+        }
+        @BuildComments(Model.Product.Comments)
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('#buy').click(function () {
+        let result = confirm("Подтвердить покупку?");
+        if (result) {
+            let localcount = $('#count').val();
+            var request = new XMLHttpRequest();
+            var body = "skinid=" + @Model.Product.Id + "&count=" + localcount;
+            $('#lol').load("http://localhost:51858/Client/BuyContainer/?" + body);
+        }
+    });
+</script>

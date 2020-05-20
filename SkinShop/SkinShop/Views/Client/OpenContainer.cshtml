@@ -1,0 +1,156 @@
+﻿@model SkinShop.Models.ViewModels.ContainerOpensVM
+
+@if (Model.Message != null)
+{
+    <div class="lol">
+        @Model.Message
+    </div>
+}
+else
+{
+    <div class="left-block">
+        <div class="mycaption">
+            Ближайший слева
+        </div>
+        @{
+            string route = "";
+            switch (Model.ContainerLeft.Table)
+            {
+                case SkinShop.DL.Entities.SkinShop.Goods.Skin:
+                    route = "SkinDetails";
+                    break;
+                case SkinShop.DL.Entities.SkinShop.Goods.Game:
+                    route = "GameDetails";
+                    break;
+                case SkinShop.DL.Entities.SkinShop.Goods.Cloth:
+                    route = "ClothDetails";
+                    break;
+                case SkinShop.DL.Entities.SkinShop.Goods.Computer:
+                    route = "ComputerDetails";
+                    break;
+                case SkinShop.DL.Entities.SkinShop.Goods.ComputerComponent:
+                    route = "ComputerComponentDetails";
+                    break;
+                case SkinShop.DL.Entities.SkinShop.Goods.Container:
+                    route = "ContainerDetails";
+                    break;
+                case SkinShop.DL.Entities.SkinShop.Goods.Other:
+                    route = "OtherDetails";
+                    break;
+            }
+        }
+        <a href="@Url.Action(route, "Home", new { id = Model.ContainerLeft.Id })" class="link">
+            <div class="image">
+                @if (Model.ContainerLeft.Images.FirstOrDefault() != null)
+                {
+                    <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(Model.ContainerLeft.Images.FirstOrDefault().Photo))" alt="@Model.ContainerLeft.Images.FirstOrDefault().Text" class="img-responsive imgcustom">
+                }
+            </div>
+            <div class="descriptiontext">
+                <div class="name">
+                    @Model.ContainerLeft.Name
+                </div>
+            </div>
+        </a>
+    </div>
+
+    <div class="middle-block">
+            @{
+                route = "";
+                switch (Model.Container.Table)
+                {
+                    case SkinShop.DL.Entities.SkinShop.Goods.Skin:
+                        route = "SkinDetails";
+                        break;
+                    case SkinShop.DL.Entities.SkinShop.Goods.Game:
+                        route = "GameDetails";
+                        break;
+                    case SkinShop.DL.Entities.SkinShop.Goods.Cloth:
+                        route = "ClothDetails";
+                        break;
+                    case SkinShop.DL.Entities.SkinShop.Goods.Computer:
+                        route = "ComputerDetails";
+                        break;
+                    case SkinShop.DL.Entities.SkinShop.Goods.ComputerComponent:
+                        route = "ComputerComponentDetails";
+                        break;
+                    case SkinShop.DL.Entities.SkinShop.Goods.Container:
+                        route = "ContainerDetails";
+                        break;
+                    case SkinShop.DL.Entities.SkinShop.Goods.Other:
+                        route = "OtherDetails";
+                        break;
+                }
+            }
+            <a href="@Url.Action(route, "Home", new { id = Model.Container.Id })" class="link">
+                <div class="image">
+                    @if (Model.Container.Images.FirstOrDefault() != null)
+                    {
+                        <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(Model.Container.Images.FirstOrDefault().Photo))" alt="@Model.Container.Images.FirstOrDefault().Text" class="img-responsive imgcustom">
+                    }
+                </div>
+                <div class="descriptiontext">
+                    <div class="name">
+                        @Model.Container.Name
+                    </div>
+                </div>
+            </a>
+            @using (Ajax.BeginForm("SaleProduct", "Client", new AjaxOptions { UpdateTargetId = "result", LoadingElementId = "loading" }))
+            {
+                @Html.AntiForgeryToken()
+                <div class="form-horizontal customform">
+                    <div class="form-group">
+                        <input name="id" value="@Model.Container.Id" hidden />
+                        <input name="count" type="number" hidden value="1"/>
+                        <input id="submit" type="submit" value="Продать" class="btn submit-btn" />
+                    </div>
+                </div>
+            }
+    </div>
+
+    <div class="right-block">
+        <div class="mycaption">
+            Ближайший справа
+        </div>
+        @{
+            route = "";
+            switch (Model.ContainerRight.Table)
+            {
+                case SkinShop.DL.Entities.SkinShop.Goods.Skin:
+                    route = "SkinDetails";
+                    break;
+                case SkinShop.DL.Entities.SkinShop.Goods.Game:
+                    route = "GameDetails";
+                    break;
+                case SkinShop.DL.Entities.SkinShop.Goods.Cloth:
+                    route = "ClothDetails";
+                    break;
+                case SkinShop.DL.Entities.SkinShop.Goods.Computer:
+                    route = "ComputerDetails";
+                    break;
+                case SkinShop.DL.Entities.SkinShop.Goods.ComputerComponent:
+                    route = "ComputerComponentDetails";
+                    break;
+                case SkinShop.DL.Entities.SkinShop.Goods.Container:
+                    route = "ContainerDetails";
+                    break;
+                case SkinShop.DL.Entities.SkinShop.Goods.Other:
+                    route = "OtherDetails";
+                    break;
+            }
+        }
+        <a href="@Url.Action(route, "Home", new { id = Model.ContainerRight.Id })" class="link">
+            <div class="image">
+                @if (Model.ContainerRight.Images.FirstOrDefault() != null)
+                {
+                    <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(Model.ContainerRight.Images.FirstOrDefault().Photo))" alt="@Model.ContainerRight.Images.FirstOrDefault().Text" class="img-responsive imgcustom">
+                }
+            </div>
+            <div class="descriptiontext">
+                <div class="name">
+                    @Model.ContainerRight.Name
+                </div>
+            </div>
+        </a>
+    </div>
+}

@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.572
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkinShop", "SkinShop\SkinShop.csproj", "{BC8CA7BF-D6DC-4355-92FB-8FD4302E89B5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkinShop.BLL", "SkinShop.BLL\SkinShop.BLL.csproj", "{0C7DFC55-B6EF-4E58-8164-E8A38D96635F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SkinShop.DL", "SkinShop.DL\SkinShop.DL.csproj", "{28C2B499-32C5-42B1-AF81-ECC2247AD0F0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BC8CA7BF-D6DC-4355-92FB-8FD4302E89B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC8CA7BF-D6DC-4355-92FB-8FD4302E89B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC8CA7BF-D6DC-4355-92FB-8FD4302E89B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC8CA7BF-D6DC-4355-92FB-8FD4302E89B5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0C7DFC55-B6EF-4E58-8164-E8A38D96635F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C7DFC55-B6EF-4E58-8164-E8A38D96635F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C7DFC55-B6EF-4E58-8164-E8A38D96635F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C7DFC55-B6EF-4E58-8164-E8A38D96635F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{28C2B499-32C5-42B1-AF81-ECC2247AD0F0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{28C2B499-32C5-42B1-AF81-ECC2247AD0F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{28C2B499-32C5-42B1-AF81-ECC2247AD0F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{28C2B499-32C5-42B1-AF81-ECC2247AD0F0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B8403FCC-699A-4F31-98CC-39F2905FB1F9}
+	EndGlobalSection
+EndGlobal

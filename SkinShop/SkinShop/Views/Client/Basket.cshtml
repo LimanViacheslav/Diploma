@@ -1,0 +1,193 @@
+﻿@model SkinShop.Models.ViewModels.BasketVM
+
+@{
+    ViewBag.Title = "Basket";
+}
+
+@Styles.Render("~/Content/SkinShopCSS/Basket.css")
+
+<div class="caption gradient-text">К о р з и н а</div>
+
+@{
+    double price = 0;
+    List<double> prices = new List<double>();
+    List<int> discounts = new List<int>();
+
+    foreach (var i in Model.Basket.Products)
+    {
+        prices.Add(i.Price);
+        discounts.Add(i.Sale);
+    }
+
+    bool flag = true;
+}
+
+@if (ViewBag.Status == false)
+{
+    <div class="text-danger">
+        @if (ViewBag.Result != null)
+        {
+            <p>
+                @ViewBag.Result
+            </p>
+        }
+    </div>
+}
+else
+{
+    <div class="text-success">
+        @if (ViewBag.Result != null)
+        {
+            <p>
+                @ViewBag.Result
+            </p>
+        }
+    </div>
+}
+
+@if (Model == null || Model.Basket.Products == null || Model.Basket.Products.FirstOrDefault() == null)
+{
+    <div class="basket-text">
+        У Вас пока нет товаров в корзине
+    </div>
+    <div class="toskins-button">
+        <a href="@Url.Action("Index", "Home")" class="btn btn-info">Перейти к скинам</a>
+    </div>
+}
+else
+{
+    using (Html.BeginForm())
+    {
+        <input type="hidden" value="@Model.Basket.Id" name="Basket.Id" />
+        <div class="container-fluid">
+            @foreach (var i in Model.Basket.Products)
+            {
+            <div class="comblock">
+                <div class="block col-md-8 col-md-offset-1 col-sm-8 col-sm-offset-1 col-xs-10 col-xs-offset-1">
+                    @{
+                        string route = "";
+                        switch (i.Table)
+                        {
+                            case SkinShop.DL.Entities.SkinShop.Goods.Skin:
+                                route = "SkinDetails";
+                                break;
+                            case SkinShop.DL.Entities.SkinShop.Goods.Game:
+                                route = "GameDetails";
+                                break;
+                            case SkinShop.DL.Entities.SkinShop.Goods.Cloth:
+                                route = "ClothDetails";
+                                break;
+                            case SkinShop.DL.Entities.SkinShop.Goods.Computer:
+                                route = "ComputerDetails";
+                                break;
+                            case SkinShop.DL.Entities.SkinShop.Goods.ComputerComponent:
+                                route = "ComputerComponentDetails";
+                                break;
+                            case SkinShop.DL.Entities.SkinShop.Goods.Container:
+                                route = "ContainerDetails";
+                                break;
+                            case SkinShop.DL.Entities.SkinShop.Goods.Other:
+                                route = "OtherDetails";
+                                break;
+                        }
+                    }
+                    <a href="@Url.Action(route, "Home", new { id = i.Id })" class="linkcustom">
+                        <div class="row">
+                            <div class="image basket-img">
+                                @if (i.Images.FirstOrDefault() != null)
+                                {
+                                    <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(i.Images.FirstOrDefault().Photo))" alt="@i.Images.FirstOrDefault().Text" class="img-responsive imgcustom">
+                                }
+                            </div>
+                            <div class="textblock">
+                                <div class="name">
+                                    @i.Name
+                                </div>
+                                <div class="price">
+                                    @if (i.Sale > 0)
+                                    {
+                                        <div name="priceinput" class="newprice"><input class="inputprice form-control" value="@(i.Price - ((i.Price * i.Sale) / 100)) uah" disabled="disabled" /></div>
+                                        price += (i.Price - ((i.Price * i.Sale) / 100));
+                                    }
+                                    else
+                                    {
+                                        <div name="priceinput" class="newprice"><input class="inputprice form-control" value="@i.Price uah" disabled="disabled" /></div>
+                                        price += i.Price;
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="buttons-block">
+                    <div class="deletebutton">
+                        <input name="counts" type="number" min="1" max="30" value="1" class="form-control counts" />
+                    </div>
+                    <div class="deletebutton">
+                        <a href="@Url.Action("DeleteFromBasket", "Client", new { skinid = i.Id })" class="form-control btn-danger">Удалить</a>
+                    </div>
+                </div>
+
+                @if (i.Table == SkinShop.DL.Entities.SkinShop.Goods.Cloth)
+                {
+                <div class="filter">
+                    <div class="filter-tag">Цветa:</div>
+                    @foreach (var j in Model.Clothes.Find(x => x.Name == i.Name).Colors)
+                    {
+                        if (flag)
+                        {
+                            <input id="@j.Name" name="colors" type="radio" value="@j.Name" checked /><label for="@j.Name">@j.Name</label><br />
+                            flag = false;
+
+                        }
+                        else
+                        {
+                            <input id="@j.Name" name="colors" type="radio" value="@j.Name" /><label for="@j.Name">@j.Name</label><br />
+                        }
+                    }
+                    @{ 
+                        flag = true;
+                    }
+                </div>
+                }
+                @if (i.Table == SkinShop.DL.Entities.SkinShop.Goods.Cloth)
+                {
+                <div class="filter">
+                    <div class="filter-tag">Размеры:</div>
+                    @foreach (var j in Model.Clothes.Find(x => x.Name == i.Name).Sizes)
+                    {
+                        if (flag)
+                        {
+                            <input id="@j.Data" name="sizes" type="radio" value="@j.Data" checked /><label for="@j.Data">@j.Data</label><br />
+                            flag = false;
+
+                        }
+                        else
+                        {
+                            <input id="@j.Data" name="sizes" type="radio" value="@j.Data" /><label for="@j.Data">@j.Data</label><br />
+                        }
+                    }
+                </div>
+                }
+            </div>
+            }
+        </div>
+        <div class="allprice">
+            Всего к оплате: <span class="sumprice">@price</span> uah
+        </div>
+        <input type="submit" value="Заказать" class="orderbutton form-control btn-success" />
+    }
+}
+
+
+<script>
+    $('.counts').change(function () {
+        let counts = $('.counts');
+        let prices = $('.inputprice');
+        let result = 0;
+        for (let i = 0; i < counts.length; i++) {
+            result += counts[i].value * parseInt(prices[i].value);
+        }
+        $('.sumprice').html(result);
+    })
+</script>

@@ -1,0 +1,27 @@
+﻿@Styles.Render("~/Content/SkinShopCSS/CreateGame.css")
+
+@if (ViewBag.Text != null)
+{
+    <div class="text-block">
+        @ViewBag.Text
+    </div>
+}
+else
+{
+    <div class="text-block">
+        Oплата прошла успешно, cпасибо за покупку
+    </div>
+}
+<div class="img-block">
+    <div class="img">
+        <img src="~/Content/Images/pay.jpg" class="img-responsive" />
+    </div>
+</div>
+<div class="links">
+    <div class="link-body">
+        <a href="@Url.Action("Orders", "Client")" class="btn">Заказы</a>
+    </div>
+    <div class="link-body">
+        <a href="@Url.Action("Main", "Home")" class="btn">Главная</a>
+    </div>
+</div>
