@@ -20,6 +20,13 @@ else
             {
                 <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(Model.Image.Photo))" alt="@Model.Image.Text" class="img-responsive imgcustom">
             }
+            else
+            {
+                <img src="~/Content/Images/notimage.png" alt="Image" class="img-responsive imgcustom">
+            }
+            <div class="change">
+                <a href="@Url.Action("ChangeImage", "Account")" class="btn btn-success">Изменить</a>
+            </div>
         </div>
         <div class="upper">
             <div class="name">
@@ -61,7 +68,7 @@ else
             </div>
             <div class="title">
                 Номер телефона:
-                @if (Model.PhoneNumber != "")
+                @if (Model.PhoneNumber != null)
                 {
                     @Html.DisplayFor(model => model.PhoneNumber)
                 }
@@ -196,7 +203,7 @@ else
                     @foreach (var i in Model.Client.ContainerToCountOpens)
                     {
                         <div class="col-md-3 col-xs-10 col-sm-6 block countopen">
-                            <a href="@Url.Action("ContainerDetails", "Home", new { id = i.Id })" class="link">
+                            <a href="@Url.Action("ContainerDetails", "Home", new { id = i.Container.Id })" class="link">
                                 <div class="image">
                                     @if (i.Container.Images.FirstOrDefault() != null)
                                     {
@@ -218,20 +225,47 @@ else
                 </div>
             </div>
         }
-        <div class="links">
-            <div class="usefull">
-                Полезные ссылки
+            <div class="links">
+                <div class="usefull">
+                    Полезные ссылки
+                </div>
+                @if (User.IsInRole("user"))
+                {
+                    <div class="money-btn float">
+                        <a href="@Url.Action("Main","Home")" class="btn">Главная</a>
+                    </div>
+                    <div class="money-btn float">
+                        <a href="@Url.Action("Basket","Client")" class="btn">Корзина</a>
+                    </div>
+                }
+                @if (User.IsInRole("admin"))
+                {
+                    <div class="money-btn float">
+                        <a href="@Url.Action("CreateSkin","Admin")" class="btn">Добавить скин</a>
+                    </div>
+                    <div class="money-btn float">
+                        <a href="@Url.Action("CreateGame","Admin")" class="btn">Добавить игру</a>
+                    </div>
+                    <div class="money-btn float">
+                        <a href="@Url.Action("CreateCloth","Admin")" class="btn">Добавить вещь</a>
+                    </div>
+                    <div class="money-btn float">
+                        <a href="@Url.Action("CreateComputerComponent","Admin")" class="btn">Добавить компонент</a>
+                    </div>
+                    <div class="money-btn float">
+                        <a href="@Url.Action("CreateComputer","Admin")" class="btn">Добавить компьютер</a>
+                    </div>
+                    <div class="money-btn float">
+                        <a href="@Url.Action("CreateContainer","Admin")" class="btn">Добавить кейс</a>
+                    </div>
+                    <div class="money-btn float">
+                        <a href="@Url.Action("CreateOther","Admin")" class="btn">Добавить другой товар</a>
+                    </div>
+                    <div class="money-btn float">
+                        <a href="@Url.Action("Register","Account")" class="btn">Добавить менеджера</a>
+                    </div>
+                }
             </div>
-            @if (User.IsInRole("user"))
-            {
-                <div class="money-btn float">
-                    <a href="@Url.Action("Main","Home")" class="btn">Главная</a>
-                </div>
-                <div class="money-btn float">
-                    <a href="@Url.Action("Basket","Client")" class="btn">Корзина</a>
-                </div>
-            }
-        </div>
     </div>
 <div class="lol"></div>
 

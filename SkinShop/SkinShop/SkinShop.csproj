@@ -196,6 +196,7 @@
     <Compile Include="Models\SkinShop\SkinRaretyDM.cs" />
     <Compile Include="Models\SkinShop\StringDataDM.cs" />
     <Compile Include="Models\ViewModels\BasketVM.cs" />
+    <Compile Include="Models\ViewModels\ChangeImageVM.cs" />
     <Compile Include="Models\ViewModels\ClothDetailsVM.cs" />
     <Compile Include="Models\ViewModels\ClothesVM.cs" />
     <Compile Include="Models\ViewModels\CompComponentDetailsVM.cs" />
@@ -210,12 +211,16 @@
     <Compile Include="Models\ViewModels\CreateComputerComponentVM.cs" />
     <Compile Include="Models\ViewModels\CreateComputerVM.cs" />
     <Compile Include="Models\ViewModels\CreateContainerVM.cs" />
+    <Compile Include="Models\ViewModels\CreateOtherVM.cs" />
     <Compile Include="Models\ViewModels\CreateSkinRarety.cs" />
     <Compile Include="Models\ViewModels\DeliveryVM.cs" />
     <Compile Include="Models\ViewModels\GameCreateVM.cs" />
     <Compile Include="Models\ViewModels\GameDetailsVM.cs" />
     <Compile Include="Models\ViewModels\GamesVM.cs" />
+    <Compile Include="Models\ViewModels\MainVM.cs" />
     <Compile Include="Models\ViewModels\OrdersVM.cs" />
+    <Compile Include="Models\ViewModels\OtherDetailsVM.cs" />
+    <Compile Include="Models\ViewModels\OthersVM.cs" />
     <Compile Include="Models\ViewModels\PayVM.cs" />
     <Compile Include="Models\ViewModels\SkinCreateVM.cs" />
     <Compile Include="Models\ViewModels\SkinDetailsView.cs" />
@@ -237,6 +242,7 @@
     <Content Include="Content\Images\fortniteLogo.jpg" />
     <Content Include="Content\Images\Geek-Cloud-logo.png" />
     <Content Include="Content\Images\Gifs\loading.gif" />
+    <Content Include="Content\Images\Gifs\loadingnew.gif" />
     <Content Include="Content\Images\hotslogo.jpg" />
     <Content Include="Content\Images\Icons\iconfinder_ig_instagram_insta_photo_5340248.png" />
     <Content Include="Content\Images\Icons\iconfinder_mail_email_e-mail_letter_5340267.png" />
@@ -256,12 +262,14 @@
     <Content Include="Content\Images\m4logo.png" />
     <Content Include="Content\Images\new.png" />
     <Content Include="Content\Images\new_smm_5_rus.jpg" />
+    <Content Include="Content\Images\notimage.png" />
     <Content Include="Content\Images\overwatchLogo.jpg" />
     <Content Include="Content\Images\PageNotFound.jpg" />
     <Content Include="Content\Images\pay.jpg" />
     <Content Include="Content\Images\pubglogo.jpg" />
     <Content Include="Content\Images\Sale.png" />
     <Content Include="Content\Images\usplogo.png" />
+    <Content Include="Content\ScriptsSkinShop\Skip.js" />
     <Content Include="Content\SkinShopCSS\Basket.css" />
     <Content Include="Content\SkinShopCSS\CreateGame.css" />
     <Content Include="Content\SkinShopCSS\CreateSkin.css" />
@@ -359,6 +367,11 @@
     <Content Include="Views\Client\Open.cshtml" />
     <Content Include="Views\Client\OpenContainer.cshtml" />
     <Content Include="Views\Client\SaleProduct.cshtml" />
+    <Content Include="Views\Admin\CreateOther.cshtml" />
+    <Content Include="Views\Home\Others.cshtml" />
+    <Content Include="Views\Home\OtherFilters.cshtml" />
+    <Content Include="Views\Home\OtherDetails.cshtml" />
+    <Content Include="Views\Account\ChangeImage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

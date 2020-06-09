@@ -255,3 +255,63 @@
 .new-other img {
     width: 80px;
 }
+
+.load {
+    width: 200px;
+    margin: 10px auto;
+}
+
+.avtar {
+    width: 50px;
+    height: 50px;
+    border: 3px solid white;
+    border-radius: 25px;
+    float: left;
+    overflow: hidden;
+}
+
+.img {
+    width: 100px;
+    text-align: center;
+}
+
+.author {
+    float: left;
+    font-weight: bold;
+    font-size: 25px;
+    padding-left: 10px;
+    padding-top: 8px;
+}
+
+.delete-mes {
+    float: right;
+}
+
+td {
+    border-color: greenyellow !important;
+    border-bottom: 1px solid greenyellow;
+}
+
+th {
+    text-align: center;
+    border-color: greenyellow !important;
+    border-bottom: 1px solid greenyellow;
+    font-size: 20px;
+    color: darkgray;
+}
+
+table {
+    text-align: center;
+    width: 500px;
+    margin: 0 auto;
+    color: lightgray;
+    border-collapse: separate;
+}
+
+tr:hover td {
+    background: rgba(0, 0, 0, 0.5);
+}
+
+tr {
+    height: 70px;
+}

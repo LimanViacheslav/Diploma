@@ -87,3 +87,13 @@
 .form-control option {
     background-color: dimgray;
 }
+
+.add-btn {
+    width: 40px;
+    margin: 0 45% !important;
+    text-align: center;
+}
+
+.form-horizontal {
+    width: 100%;
+}

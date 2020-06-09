@@ -12,6 +12,7 @@ using SkinShop.Mappers;
 using SkinShop.Models;
 using SkinShop.Models.Account;
 using SkinShop.Models.SkinShop;
+using SkinShop.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -27,6 +28,7 @@ namespace SkinShop.Controllers
     public class AccountController : Controller
     {
         IAccountService _service = new AccountService(new UnitOfWork("DefaultConnection"));
+        IAdminService _adminService = new AdminService(new UnitOfWork("DefaultConnection"));
         MappersForDM _mappers = new MappersForDM();
 
         private IAuthenticationManager AuthenticationManager
@@ -162,6 +164,32 @@ namespace SkinShop.Controllers
                 Address = "ул. Спортивная, д.30, кв.75",
                 Role = "admin",
             }, new List<string> { "user", "admin", "manager" });
+        }
+
+        [HttpGet]
+        public ActionResult ChangeImage()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ChangeImage(ChangeImageVM model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.Image != null)
+                {
+                    ImageDTO image = new ImageDTO();
+                    image.Text = model.Alt;
+                    using (var reader = new BinaryReader(model.Image.InputStream))
+                        image.Photo = reader.ReadBytes(model.Image.ContentLength);
+                    OperationDetails result = _adminService.ChangeImage(User.Identity.Name, image);
+                    ViewBag.Result = result.Message;
+                    ViewBag.Status = result.Succedeed;
+                    return View(model);
+                }
+            }
+            return View(model);
         }
     }
 }

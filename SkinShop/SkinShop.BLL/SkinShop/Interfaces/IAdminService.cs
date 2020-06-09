@@ -26,6 +26,7 @@ namespace SkinShop.BLL.SkinShop.Interfaces
         Task<OperationDetails> CreateEmployee(UserDTO userDTO);
         OperationDetails Unban(string id);
         OperationDetails Ban(string id);
+        OperationDetails DeleteComment(int commentId);
 
         ICollection<UserDTO> GetUsers();
 
@@ -50,6 +51,7 @@ namespace SkinShop.BLL.SkinShop.Interfaces
         ICollection<ComputerDTO> GetComputers();
         ICollection<ComputerComponentDTO> GetCompComponents();
         ICollection<ContainerDTO> GetContainers();
+        ICollection<OtherDTO> GetOthers();
 
         OperationDetails SoftDelete(Tables tables, int id);
         ICollection<ComputerComponentDTO> GetComputerComponentsByType(ComponentType type);
@@ -60,5 +62,8 @@ namespace SkinShop.BLL.SkinShop.Interfaces
         ICollection<ComputerDTO> ProductsIntoComputers(List<ProductDTO> products);
         ICollection<ContainerDTO> ProductsIntoContainers(List<ProductDTO> products);
         ICollection<ProductDTO> GetAllProducts();
+        ICollection<OtherDTO> ProductsIntoOthers(List<ProductDTO> products);
+
+        OperationDetails ChangeImage(string userName, ImageDTO image);
     }
 }

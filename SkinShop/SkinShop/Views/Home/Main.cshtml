@@ -1,4 +1,4 @@
-﻿@model List<SkinShop.Models.SkinShop.GameDM>
+﻿@model SkinShop.Models.ViewModels.MainVM
 
 @Styles.Render("~/Content/SkinShopCSS/Main.css")
 
@@ -87,39 +87,64 @@
             </div>
         </div>
     <div class="caption gradient-text">
-        Список игр
+        Категории
     </div>
     <div class="games">
         @if (Model != null)
         {
-            foreach (var i in Model)
+            foreach (var i in Model.Products)
             {
-                <div class="gameblock revealator-slidedown revealator-delay1">
-                    @if (User.IsInRole("admin"))
-                    {
-                        <div class="deletelink">
-                            <a class="btn btn-danger" href="@Url.Action("DeleteGame", "Admin", new { id = i.Id})">Удалить</a>
-                        </div>
-                        <div class="update">
-                            <a href="@Url.Action("UpdateGame", "Admin", new { id = i.Id})" class="btn btn-info">Изменить</a>
-                        </div>
-                    }
-                    @*<a href="@Url.Action("Index", "Home", new { gameName = i.Name})">
-                        <div class="gameimage">
-                            @if (i.Images.FirstOrDefault() != null)
+                if (i != null)
+                {
+                    <div class="gameblock revealator-slidedown">
+                        @{
+                            string route = "";
+                            string name = "";
+                            switch (i.Table)
                             {
-                                <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(i.Images.FirstOrDefault().Photo))" alt="@i.Images.FirstOrDefault()" class="img-responsive imgcustom">
+                                case SkinShop.DL.Entities.SkinShop.Goods.Cloth:
+                                    route = "Clothes";
+                                    name = "Одежда";
+                                    break;
+                                case SkinShop.DL.Entities.SkinShop.Goods.Computer:
+                                    route = "Computers";
+                                    name = "Компьютеры";
+                                    break;
+                                case SkinShop.DL.Entities.SkinShop.Goods.ComputerComponent:
+                                    route = "ComputerComponents";
+                                    name = "Компьютерные компоненты";
+                                    break;
+                                case SkinShop.DL.Entities.SkinShop.Goods.Container:
+                                    route = "Containers";
+                                    name = "Кейсы";
+                                    break;
+                                case SkinShop.DL.Entities.SkinShop.Goods.Game:
+                                    route = "Games";
+                                    name = "Игры";
+                                    break;
+                                case SkinShop.DL.Entities.SkinShop.Goods.Other:
+                                    route = "Others";
+                                    name = "Другие товары";
+                                    break;
+                                case SkinShop.DL.Entities.SkinShop.Goods.Skin:
+                                    route = "Index";
+                                    name = "Скины";
+                                    break;
                             }
-                        </div>
-                        <div class="gamename">
-                            @i.Name
-                        </div>
-                        <div class="gameinfo">
-                            <span class="glyphicon glyphicon-record"></span> @i.Genre <br />
-                            <span class="glyphicon glyphicon-record"></span> @i.Type
-                        </div>
-                    </a>*@
-                </div>
+                        }
+                        <a href="@Url.Action(route, "Home")" class="link">
+                            <div class="image">
+                                @if (i.Images.FirstOrDefault() != null)
+                                {
+                                    <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(i.Images.FirstOrDefault().Photo))" alt="@i.Images.FirstOrDefault().Text" class="img-responsive imgcustom">
+                                }
+                            </div>
+                            <div class="category-name">
+                                @name
+                            </div>
+                        </a>
+                    </div>
+                }
             }
         }
     </div>

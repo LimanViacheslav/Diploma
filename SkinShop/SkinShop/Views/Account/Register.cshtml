@@ -33,7 +33,7 @@ else
 {
     <div class="text-danger">@ViewBag.Result</div>
 }
-@using (Html.BeginForm("Register", "Account", FormMethod.Post, new { enctype = "multipart/form-data", @id = "form" }))
+@using (Html.BeginForm(action, controller, FormMethod.Post, new { enctype = "multipart/form-data", @id = "form" }))
 {
     @Html.AntiForgeryToken()
 

@@ -82,5 +82,9 @@ namespace SkinShop.Models.ViewModels
         public ICollection<SelectListItem> PowerSupplies { get; set; }
 
         public ICollection<SelectListItem> SystemBlocks { get; set; }
+
+        public List<string> PropertyNames { get; set; }
+
+        public List<string> PropertyValues { get; set; }
     }
 }

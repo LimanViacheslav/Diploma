@@ -21,5 +21,7 @@ namespace SkinShop.Models.SkinShop
         public DateTime CommentDate { get; set; }
 
         public virtual UserDM User { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

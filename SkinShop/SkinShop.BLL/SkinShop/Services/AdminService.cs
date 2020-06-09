@@ -673,7 +673,12 @@ namespace SkinShop.BLL.SkinShop.Services
         public ICollection<UserDTO> GetUsers()
         {
             ICollection<User> users = Database.ClientManager.GetUsers().ToList();
-            return _mappers.ToUserDTO.Map<ICollection<User>, ICollection<UserDTO>>(users);
+            List<UserDTO> usersDTO = _mappers.ToUserDTO.Map<ICollection<User>, List<UserDTO>>(users);
+            foreach(var i in usersDTO)
+            {
+                i.Role = Database.UserManager.GetRolesAsync(i.Id).Result.FirstOrDefault();
+            }
+            return usersDTO;
         }
 
         public async Task<OperationDetails> CreateEmployee(UserDTO userDTO)
@@ -695,11 +700,18 @@ namespace SkinShop.BLL.SkinShop.Services
             }
         }
 
+        public OperationDetails DeleteComment(int commentId)
+        {
+            Database.Comments.Delete(commentId);
+            Database.Save();
+            return new OperationDetails(true, "Комментарий успешно удалён", this.ToString());
+        }
+
         public OperationDetails Ban(string id)
         {
             User user = Database.ClientManager.GetUser(id);
             user.IsBanned = true;
-            Database.UserManager.UpdateAsync(user);
+            Database.ClientManager.Update(user);
             Database.Save();
             return new OperationDetails(true, "Пользователь успешно забанен", this.ToString());
         }
@@ -708,9 +720,9 @@ namespace SkinShop.BLL.SkinShop.Services
         {
             User user = Database.ClientManager.GetUser(id);
             user.IsBanned = false;
-            Database.UserManager.UpdateAsync(user);
+            Database.ClientManager.Update(user);
             Database.Save();
-            return new OperationDetails(true, "Пользователь успешно разабанен", this.ToString());
+            return new OperationDetails(true, "Пользователь успешно разбанен", this.ToString());
         }
 
         public OperationDetails SoftDelete(Tables tables, int id)
@@ -882,6 +894,12 @@ namespace SkinShop.BLL.SkinShop.Services
             return _mappers.ToOtherDTO.Map<Other, OtherDTO>(other);
         }
 
+        public ICollection<OtherDTO> GetOthers()
+        {
+            ICollection<Other> comp = Database.Others.Show();
+            return _mappers.ToOtherDTO.Map<ICollection<Other>, ICollection<OtherDTO>>(comp);
+        }
+
         public SkinRarityDTO GetSkinRarity(int id)
         {
             SkinRarity skinRarity = Database.SkinRareties.Get(id);
@@ -970,6 +988,31 @@ namespace SkinShop.BLL.SkinShop.Services
                     comps.Add(comp);
             }
             return _mappers.ToContainerDTO.Map<ICollection<Container>, ICollection<ContainerDTO>>(comps);
+        }
+
+        public ICollection<OtherDTO> ProductsIntoOthers(List<ProductDTO> products)
+        {
+            List<Other> comps = new List<Other>();
+            foreach (var pr in products)
+            {
+                Other comp = Database.Others.Get(pr.FromTableId);
+                if (comp != null)
+                    comps.Add(comp);
+            }
+            return _mappers.ToOtherDTO.Map<ICollection<Other>, ICollection<OtherDTO>>(comps);
+        }
+
+        public OperationDetails ChangeImage(string userName, ImageDTO image)
+        {
+            if (image == null)
+                return new OperationDetails(false, "Не удалось найти изображение", "");
+            User user = Database.ClientManager.FindUser(x => x.UserName == userName);
+            if(user == null)
+                return new OperationDetails(false, "Не удалось найти пользователя", "");
+            user.Image = _mappers.ToImage.Map<ImageDTO, Image>(image);
+            Database.ClientManager.Update(user);
+            Database.Save();
+            return new OperationDetails(true, "Изображение успешно изменено", "");
         }
 
         public ICollection<ComputerComponentDTO> GetComputerComponentsByType(ComponentType type)

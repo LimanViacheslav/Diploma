@@ -32,56 +32,6 @@ namespace SkinShop.DL.EF
             db.SkinRarities.Add(_common);
             db.SkinRarities.Add(_legendary);
 
-            Game cs = new Game()
-            {
-                IsThingGame = true,
-                Name = "CS GO",
-                SystemRequirements = "Минимальные системные требования: /br" +
-                "Процессор: Intel® Core™ 2 Duo E6600 / AMD Phenom™ X3 8750 " +
-                "Видеокарта: Видеокарта должна иметь объем видеопамяти не меньше 256 Мб " +
-                "Оперативная память: 2 Гб " +
-                "Операционная система: Windows® 7 / Vista / XP " +
-                "Место на диске: 15 ГБ " +
-                "Рекомендуемые системные требования: " +
-                "Официальных рекомендованных системных требований нет.Ниже представлено наше видение требований, достаточных для игры в FHD разрешении на максимальных настройках." +
-                " Процессор: Intel® Core™ i3 " +
-                "Видеокарта: NVIDIA® GeForce® GTX 1050 2 ГБ и любая видеокарта новее с видеопамятью от 1 Гб " +
-                "Оперативная память: 4 Гб " +
-                "Операционная система: Windows 7 / 8 / 10 " +
-                "Место на диске: 15 ГБ"
-            };
-            db.Games.Add(cs);
-
-            Product csProduct = new Product()
-            {
-                FromTableId = 1,
-                Name = "CS GO",
-                Price = 200,
-                Sale = 0,
-                Table = Goods.Game
-            };
-
-            db.Products.Add(csProduct);
-
-            Skin ak = new Skin()
-            {
-                Game = cs,
-                SkinRarity = _legendary,
-                Name = "Ak 47"
-            };
-
-            Product akProduct = new Product()
-            {
-                FromTableId = 1,
-                Table = Goods.Skin,
-                Name = "Ak 47",
-                Price = 100,
-                Sale = 10
-            };
-
-            db.Products.Add(akProduct);
-            db.Skins.Add(ak);
-
             base.Seed(db);
         }
     }

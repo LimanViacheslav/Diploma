@@ -211,3 +211,8 @@
     color: mediumseagreen;
     transform: scale(1.05);
 }
+
+.change {
+    width: 90px;
+    margin: 10px auto;
+}

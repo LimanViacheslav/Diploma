@@ -28,8 +28,17 @@ namespace SkinShop.Controllers
 
         public ActionResult Main()
         {
-            List<GameDM> games = _mappers.ToGameDM.Map<ICollection<GameDTO>, List<GameDM>>(_adminService.GetGames());
-            return View();
+            List<ProductDM> products = new List<ProductDM>();
+            products.Add(_mappers.ToProductDM.Map<ProductDTO, ProductDM>(_adminService.GetProducts(Goods.Cloth).FirstOrDefault()));
+            products.Add(_mappers.ToProductDM.Map<ProductDTO, ProductDM>(_adminService.GetProducts(Goods.Computer).FirstOrDefault()));
+            products.Add(_mappers.ToProductDM.Map<ProductDTO, ProductDM>(_adminService.GetProducts(Goods.ComputerComponent).FirstOrDefault()));
+            products.Add(_mappers.ToProductDM.Map<ProductDTO, ProductDM>(_adminService.GetProducts(Goods.Container).FirstOrDefault()));
+            products.Add(_mappers.ToProductDM.Map<ProductDTO, ProductDM>(_adminService.GetProducts(Goods.Game).FirstOrDefault()));
+            products.Add(_mappers.ToProductDM.Map<ProductDTO, ProductDM>(_adminService.GetProducts(Goods.Other).FirstOrDefault()));
+            products.Add(_mappers.ToProductDM.Map<ProductDTO, ProductDM>(_adminService.GetProducts(Goods.Skin).FirstOrDefault()));
+            MainVM model = new MainVM();
+            model.Products = products;
+            return View(model);
         }
 
         public ActionResult Games(int page = 1)
@@ -1556,6 +1565,217 @@ namespace SkinShop.Controllers
                     }
                     cont.Container.Products = cont.Container.Products.OrderBy(x => x.Sale!=0?(x.Price - (x.Price*x.Sale)/100):(x.Price)).ToList();
                     return View(cont);
+                }
+            }
+            return RedirectToAction("PageNotFound");
+        }
+
+        public ActionResult Others(int page = 1)
+        {
+            List<ProductDM> products = _mappers.ToProductDM.Map<ICollection<ProductDTO>, List<ProductDM>>(_adminService.GetProducts(Goods.Other));
+            foreach (var i in products)
+            {
+                i.Comments = _mappers.ToCommentDM.Map<ICollection<CommentDTO>, List<CommentDM>>(_clientService.GetCommentsForProduct(i.Id));
+            }
+            OthersVM result = new OthersVM();
+            result.MinPrice = Convert.ToInt32((from t in products
+                                               orderby (t.Sale != 0) ? (t.Price - (t.Price * t.Sale) / 100) : (t.Price) ascending
+                                               select (t.Sale != 0) ? (t.Price - (t.Price * t.Sale) / 100) : (t.Price)).First());
+            result.MaxPrice = Convert.ToInt32((from t in products
+                                               orderby (t.Sale != 0) ? (t.Price - (t.Price * t.Sale) / 100) : (t.Price) descending
+                                               select (t.Sale != 0) ? (t.Price - (t.Price * t.Sale) / 100) : (t.Price)).First()) + 1;
+            result.Types = (from t in _mappers.ToOtherDM.Map<ICollection<OtherDTO>, IEnumerable<OtherDM>>(_adminService.GetOthers())
+                            select t.Type).Distinct().ToList();
+
+            int pageSize = 18;
+
+            result.Others = products.Skip((page - 1) * pageSize).Take(pageSize);
+            PageInfo pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = products.Count() };
+            result.PageInfo = pageInfo;
+            return View(result);
+        }
+
+        public ActionResult OtherFilters(string searchbyname = "", string order = "", string[] types = null, int page = 1, string minPrice = "", string maxPrice = "")
+        {
+            OthersVM result = new OthersVM();
+            int pageSize = 18;
+            PageInfo pageInfo;
+
+            IEnumerable<ProductDM> products = _mappers.ToProductDM.Map<ICollection<ProductDTO>, ICollection<ProductDM>>(_adminService.GetProducts(Goods.Other));
+            foreach (var i in products)
+            {
+                i.Comments = _mappers.ToCommentDM.Map<ICollection<CommentDTO>, List<CommentDM>>(_clientService.GetCommentsForProduct(i.Id));
+            }
+            if (searchbyname != "")
+            {
+                products = from t in products
+                           where t.Name.Contains(searchbyname)
+                           select t;
+            }
+
+            if (minPrice != "" && maxPrice != "")
+            {
+                int min = int.Parse(minPrice);
+                int max = int.Parse(maxPrice);
+                products = from t in products
+                           where (t.Sale != 0) ? (t.Price - (t.Price * t.Sale) / 100 >= min && t.Price - (t.Price * t.Sale) / 100 <= max) : (t.Price >= min && t.Price <= max)
+                           select t;
+            }
+            else if (minPrice != "")
+            {
+                int min = int.Parse(minPrice);
+                products = from t in products
+                           where (t.Sale != 0) ? (t.Price - (t.Price * t.Sale) / 100 >= min) : (t.Price >= min)
+                           select t;
+            }
+            else if (maxPrice != "")
+            {
+                int max = int.Parse(maxPrice);
+                products = from t in products
+                           where (t.Sale != 0) ? (t.Price - (t.Price * t.Sale) / 100 <= max) : (t.Price <= max)
+                           select t;
+            }
+            List<OtherDM> others = _mappers.ToOtherDM.Map<ICollection<OtherDTO>, List<OtherDM>>(_adminService.ProductsIntoOthers(_mappers.ToProductDTO.Map<IEnumerable<ProductDM>, List<ProductDTO>>(products)));
+
+            if (types != null)
+            {
+                List<OtherDM> conts = new List<OtherDM>();
+                foreach (var i in types)
+                {
+                    List<OtherDM> localConts;
+                    localConts = (from t in conts
+                                  where t.Type == i
+                                  select t).ToList();
+                    conts.AddRange(localConts);
+                }
+                others = conts;
+            }
+
+            List<ProductDM> localProducts = new List<ProductDM>();
+            foreach (var i in products)
+            {
+                OtherDM cont = (from s in others
+                                    where s.Id == i.FromTableId
+                                    select s).FirstOrDefault();
+                if (cont != null)
+                    localProducts.Add(i);
+            }
+            products = localProducts;
+
+            if (order != "")
+            {
+                switch (order)
+                {
+                    case "По алфавиту А-Я":
+                        products = (from t in products
+                                    orderby t.Name ascending
+                                    select t).ToList();
+                        break;
+                    case "По алфавиту Я-А":
+                        products = (from t in products
+                                    orderby t.Name descending
+                                    select t).ToList();
+                        break;
+                    case "По увеличению стоимости":
+                        products = (from t in products
+                                    orderby (t.Sale != 0) ? (t.Price - (t.Price * t.Sale) / 100) : (t.Price) ascending
+                                    select t).ToList();
+                        break;
+                    case "По уменьшению стоимости":
+                        products = (from t in products
+                                    orderby (t.Sale != 0) ? (t.Price - (t.Price * t.Sale) / 100) : (t.Price) descending
+                                    select t).ToList();
+                        break;
+                    case "По популярности":
+                        products = (from t in products
+                                    orderby t.CountSeen + t.CountFavorites descending
+                                    select t).ToList();
+                        break;
+                    case "По рейтингу":
+                        products = (from t in products
+                                    orderby Convert.ToDouble(t.Comments.Sum(x => x.Assessment)) / Convert.ToDouble(t.Comments.Count) descending
+                                    select t).ToList();
+                        break;
+                    case "По заказам":
+                        products = (from t in products
+                                    orderby t.CountOrders descending
+                                    select t).ToList();
+                        break;
+                }
+            }
+
+            if (page > pageSize)
+            {
+                return RedirectToAction("PageNotFound");
+            }
+            result.Others = products.Skip((page - 1) * pageSize).Take(pageSize);
+            pageInfo = new PageInfo { PageNumber = page, PageSize = pageSize, TotalItems = products.Count() };
+            result.PageInfo = pageInfo;
+            if (products != null && products.FirstOrDefault() != null)
+            {
+                result.MinPrice = Convert.ToInt32((from t in products
+                                                   orderby (t.Sale != 0) ? (t.Price - (t.Price * t.Sale) / 100) : (t.Price) ascending
+                                                   select (t.Sale != 0) ? (t.Price - (t.Price * t.Sale) / 100) : (t.Price)).First());
+                result.MaxPrice = Convert.ToInt32((from t in products
+                                                   orderby (t.Sale != 0) ? (t.Price - (t.Price * t.Sale) / 100) : (t.Price) descending
+                                                   select (t.Sale != 0) ? (t.Price - (t.Price * t.Sale) / 100) : (t.Price)).First()) + 1;
+            }
+
+            return PartialView(result);
+        }
+
+        public ActionResult OtherDetails(int? id)
+        {
+            if (id != null)
+            {
+                UpCountSeen(Convert.ToInt32(id));
+                ProductDTO product = _adminService.GetProduct(Convert.ToInt32(id));
+                OtherDTO result = _adminService.GetOther(product.FromTableId);
+                if (result != null)
+                {
+                    OtherDetailsVM other = new OtherDetailsVM();
+                    other.IsOtherAlreadyInBasket = false;
+                    other.IsOtherAlreadyInFavorites = false;
+                    other.Other = _mappers.ToOtherDM.Map<OtherDTO, OtherDM>(result);
+                    UserDM client = _mappers.ToUserDM.Map<UserDTO, UserDM>(_accountService.GetUserByName(User.Identity.Name));
+                    if (client?.Client != null)
+                    {
+                        foreach (var i in client.Client.Favorites.Products)
+                        {
+                            if (i.Id == id)
+                            {
+                                other.IsOtherAlreadyInFavorites = true;
+                            }
+                        }
+
+                        foreach (var i in client.Client.Basket.Products)
+                        {
+                            if (i.Id == id)
+                            {
+                                other.IsOtherAlreadyInBasket = true;
+                                other.IsOtherAlreadyInFavorites = true;
+                            }
+                        }
+                    }
+                    other.Product = _mappers.ToProductDM.Map<ProductDTO, ProductDM>(product);
+                    other.Product.Comments = _mappers.ToCommentDM.Map<ICollection<CommentDTO>, List<CommentDM>>(_clientService.GetCommentsForProduct(product.Id));
+                    List<OtherDM> others = (from t in _mappers.ToOtherDM.Map<ICollection<OtherDTO>, IEnumerable<OtherDM>>(_adminService.GetOthers())
+                                                    where t.Type == other.Other.Type && t.Id != product.FromTableId
+                                                    select t).ToList();
+                    List<ProductDM> localProducts = _mappers.ToProductDM.Map<ICollection<ProductDTO>, List<ProductDM>>(_adminService.GetProducts(Goods.Other));
+                    other.OtherOthers = new List<ProductDM>();
+                    foreach (var i in others)
+                    {
+                        ProductDM prod = (from s in localProducts
+                                          where s.FromTableId == i.Id && s.Id != id
+                                          select s).FirstOrDefault();
+                        if (prod != null)
+                        {
+                            prod.Comments = _mappers.ToCommentDM.Map<List<CommentDTO>, ICollection<CommentDM>>(_clientService.GetCommentsForProduct(prod.Id));
+                            other.OtherOthers.Add(prod);
+                        }
+                    }
+                    return View(other);
                 }
             }
             return RedirectToAction("PageNotFound");

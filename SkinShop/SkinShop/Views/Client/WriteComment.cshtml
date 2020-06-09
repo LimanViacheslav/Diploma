@@ -9,8 +9,17 @@
             @foreach (var item in items)
             {
                 <div class="message">
+                    @if(User.Identity.Name == item.User.UserName)
+                    {
+                        <div class="delete-mes">
+                            @Ajax.ActionLink("X", "DeleteComment", "Client", new { commentId = item.Id, productId = item.ProductId }, new AjaxOptions { UpdateTargetId = "result", LoadingElementId = "loading" }, new { @class = "btn btn-danger"})
+                        </div>
+                    }
                     <div class="comment-assessment">
                         <img src="~/Content/Images/Icons/icons8-звезда-48.png" class="star" alt="star" /> @item.Assessment
+                    </div>
+                    <div class="avtar">
+                        <img src="@String.Format("data:image/gif;base64,{0}", Convert.ToBase64String(item.User.Image.Photo))" alt="@item.User.Image.Text" class="img">
                     </div>
                     <div class="comment-date">
                         @item.CommentDate

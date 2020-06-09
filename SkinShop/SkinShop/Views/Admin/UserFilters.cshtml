@@ -14,7 +14,16 @@
             <td>@i.Name (@i.UserName)</td>
             <td>@i.PhoneNumber</td>
             <td>@i.Email</td>
-            <td>@i.Role</td>
+            <td>
+                @if (i.Role == "user")
+                {
+                    <span class="user role">Пользователь</span>
+                }
+                @if (i.Role == "manager")
+                {
+                    <span class="manager role">Менеджер</span>
+                }
+            </td>
             <td>
                 @if (i.IsBanned)
                 {

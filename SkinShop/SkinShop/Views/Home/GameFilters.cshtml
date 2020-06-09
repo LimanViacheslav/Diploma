@@ -43,8 +43,21 @@
                             <img src="~/Content/Images/Icons/icons8-корзина-50.png" alt="show" class="producticon" />@i.CountOrders
                             <img src="~/Content/Images/Icons/icons8-сердце-50.png" alt="show" class="producticon" />@i.CountFavorites
                         </div>
-                        <div>
-                            Assessment
+                        <div class="assessment-rezult">
+                            @if (i.Comments.Any())
+                            {
+                                <div>
+                                    <img src="~/Content/Images/Icons/icons8-звезда-48.png" class="star" alt="star" />
+                                    @Math.Round(Convert.ToDouble(i.Comments.Sum(x => x.Assessment)) / Convert.ToDouble(i.Comments.Count), 1)
+                                </div>
+                            }
+                            else
+                            {
+                                <div>
+                                    <img src="~/Content/Images/Icons/icons8-звезда-48.png" class="star" alt="star" />
+                                    0
+                                </div>
+                            }
                         </div>
                     </div>
                 </div>

@@ -28,7 +28,7 @@ namespace SkinShop.Controllers
             }
 
             _employeeService.ConfirmOrder(id, User.Identity.Name);
-            return RedirectToAction("Orders");
+            return RedirectToAction("Orders", "Client");
         }
 
         public ActionResult Reject(int? id, string text)
@@ -38,7 +38,7 @@ namespace SkinShop.Controllers
                 return RedirectToAction("PageNotFound", "Home");
             }
             _employeeService.Reject(id, User.Identity.Name, text);
-            return RedirectToAction("Orders");
+            return RedirectToAction("Orders", "Client");
         }
 
         public ActionResult DeleteOrder(int id)

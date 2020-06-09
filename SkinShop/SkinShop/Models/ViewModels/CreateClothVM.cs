@@ -64,5 +64,9 @@ namespace SkinShop.Models.ViewModels
         public string Alt { get; set; }
 
         public IEnumerable<SelectListItem> Colors{ get; set; }
+
+        public List<string> PropertyNames { get; set; }
+
+        public List<string> PropertyValues { get; set; }
     }
 }

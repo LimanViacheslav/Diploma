@@ -154,6 +154,9 @@ else
                 @Html.ValidationMessageFor(model => model.Images, "", new { @class = "text-danger" })
             </div>
         </div>
+        <div class="btn btn-success add-btn" id="add">
+            +
+        </div>
 
         <div class="form-group">
             @Html.LabelFor(model => model.Alt, htmlAttributes: new { @class = "control-label" })
@@ -166,9 +169,12 @@ else
         <div class="form-group">
             @Html.LabelFor(model => model.Properties, htmlAttributes: new { @class = "control-label" })
             <div>
-                <span>Название: <input type="text" name="Property.Name" class="form-control" /></span>
-                <span>Значение: <input type="text" name="Property.Value" class="form-control" /></span>
+                <span>Название: <input type="text" name="PropertyNames" class="form-control" /></span>
+                <span>Значение: <input type="text" name="PropertyValues" class="form-control" /></span>
             </div>
+        </div>
+        <div class="btn btn-success add-btn" id="add-prop">
+            +
         </div>
 
         <div class="form-group">
@@ -178,3 +184,18 @@ else
         </div>
     </div>
 }
+
+<script type="text/javascript">
+    $('#add').click(function () {
+        $('#add').before('<div class="form-group"><div><input name="Images" type="file" accept=".jpg" />@Html.ValidationMessageFor(model => model.Images, "", new { @class = "text-danger" })</div><div class="btn btn-danger" onclick="Delete(this)">-</div></div>');
+    });
+
+    $('#add-prop').click(function () {
+        $('#add-prop').before('<div class="form-group"><div><span>Название: <input type="text" name="PropertyNames" class="form-control" /></span><span>Значение: <input type="text" name="PropertyValues" class="form-control" /></span></div><div class="btn btn-danger" onclick="Delete(this)">-</div></div>');
+    });
+
+    function Delete(e) {
+        let parent = e.parentElement;
+        parent.parentElement.removeChild(parent);
+    }
+</script>

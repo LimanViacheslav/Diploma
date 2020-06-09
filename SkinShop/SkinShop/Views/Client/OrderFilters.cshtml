@@ -195,16 +195,16 @@
                                 @if (i.Status == SkinShop.Models.SkinShop.OrderStatusDM.NotConfirmed)
                                 {
                                     <div class="confirm">
-                                        <a class="btn btn-success form-control" href="@Url.Action("ConfirmOrder", "Client", new { id = i.EmployeeId })">Подтвердить</a>
+                                        <a class="btn btn-success form-control" href="@Url.Action("ConfirmOrder", "Employee", new { id = i.Id })">Подтвердить</a>
                                     </div>
                                     <div class="reject">
-                                        <a class="btn btn-danger form-control" href="@Url.Action("Reject", "Client", new { id = i.EmployeeId})">Отклонить</a>
+                                        <a class="btn btn-danger form-control" href="@Url.Action("Reject", "Employee", new { id = i.Id})">Отклонить</a>
                                     </div>
                                 }
                                 @if (i.Status == SkinShop.Models.SkinShop.OrderStatusDM.Rejected)
                                 {
                                     <div class="confirm">
-                                        <a class="btn btn-success form-control" href="@Url.Action("ConfirmOrder", "Client", new { id = i.EmployeeId})">Подтвердить</a>
+                                        <a class="btn btn-success form-control" href="@Url.Action("ConfirmOrder", "Employee", new { id = i.Id})">Подтвердить</a>
                                     </div>
                                 }
                             </div>

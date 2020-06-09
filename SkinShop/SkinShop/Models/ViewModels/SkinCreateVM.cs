@@ -54,8 +54,15 @@ namespace SkinShop.Models.ViewModels
         [StringLength(60, MinimumLength = 0, ErrorMessage = "Недопустимая длина")]
         public string Alt { get; set; }
 
+        [Display(Name = "Дополнительные свойства")]
+        public virtual ICollection<PropertyDM> Properties { get; set; }
+
         public IEnumerable<SelectListItem> Games { get; set; }
 
         public IEnumerable<SelectListItem> SkinRarities { get; set; }
+
+        public List<string> PropertyNames { get; set; }
+
+        public List<string> PropertyValues { get; set; }
     }
 }

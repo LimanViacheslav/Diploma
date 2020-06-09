@@ -97,13 +97,13 @@ namespace SkinShop.Controllers
                 SkinDTO skin = new SkinDTO();
                 if (item.Images != null)
                 {
-                    foreach(var i in item.Images)
+                    product.Images = new List<ImageDTO>();
+                    foreach (var i in item.Images)
                     {
                         ImageDTO image = new ImageDTO();
                         image.Text = item.Alt;
                         using (var reader = new BinaryReader(i.InputStream))
                             image.Photo = reader.ReadBytes(i.ContentLength);
-                        product.Images = new List<ImageDTO>();
                         product.Images.Add(image);
                     }
                 }
@@ -122,12 +122,19 @@ namespace SkinShop.Controllers
                     SkinRarityDTO skinRarity = new SkinRarityDTO() { RarityName = item.SkinRarity };
                     skin.SkinRarity = skinRarity;
                 }
+                skin.Properties = new List<PropertyDTO>();
                 if (item.SkinType != "")
                 {
                     PropertyDTO skinType = new PropertyDTO() { Name = "Тип скина", Value = item.SkinType };
                     skin.Properties = new List<PropertyDTO>();
                     skin.Properties.Add(skinType);
                 }
+
+                for (int i = 0; i < item.PropertyNames.Count; i++)
+                {
+                    skin.Properties.Add(new PropertyDTO() { Name = item.PropertyNames[i], Value = item.PropertyValues[i] });
+                }
+
                 if (item.Description != "")
                     product.Description = item.Description;
                 OperationDetails result = _adminService.CreateSkin(product, skin, product.Name);
@@ -197,13 +204,13 @@ namespace SkinShop.Controllers
                 GameDTO game = new GameDTO();
                 if (item.Images != null)
                 {
+                    product.Images = new List<ImageDTO>();
                     foreach (var i in item.Images)
                     {
                         ImageDTO image = new ImageDTO();
                         image.Text = item.Alt;
                         using (var reader = new BinaryReader(i.InputStream))
                             image.Photo = reader.ReadBytes(i.ContentLength);
-                        product.Images = new List<ImageDTO>();
                         product.Images.Add(image);
                     }
                 }
@@ -221,6 +228,12 @@ namespace SkinShop.Controllers
                 game.Properties.Add(new PropertyDTO() { Name = "Тип игры", Value = item.Type });
                 game.Properties.Add(new PropertyDTO() { Name = "Ссылка на игру", Value = item.GameURL });
                 game.Properties.Add(new PropertyDTO() { Name = "Жанр игры", Value = item.Genre });
+
+                for(int i = 0; i < item.PropertyNames.Count; i++)
+                {
+                    game.Properties.Add(new PropertyDTO() { Name = item.PropertyNames[i], Value = item.PropertyValues[i] });
+                }
+
                 OperationDetails result = _adminService.CreateGame(product, game, product.Name);
                 ViewBag.Result = result.Message;
                 ViewBag.Status = result.Succedeed;
@@ -244,11 +257,22 @@ namespace SkinShop.Controllers
                     Role = "manager",
                     PhoneNumber = model.PhoneNumber
                 };
+                if (model.Images != null)
+                {
+                    foreach (var i in model.Images)
+                    {
+                        ImageDTO image = new ImageDTO();
+                        image.Text = model.Alt;
+                        using (var reader = new BinaryReader(i.InputStream))
+                            image.Photo = reader.ReadBytes(i.ContentLength);
+                        userDto.Image = image;
+                    }
+                }
                 OperationDetails result = await _adminService.CreateEmployee(userDto);
                 if (result.Succedeed)
                 {
                     ViewBag.Result = result.Message;
-                    return RedirectToAction("Register", "Account");
+                    return RedirectToAction("Users", "Admin");
                 }
                 else
                     ModelState.AddModelError(result.Property, result.Message);
@@ -319,21 +343,21 @@ namespace SkinShop.Controllers
                 ClothDTO cloth = new ClothDTO();
                 if (item.Images != null)
                 {
+                    product.Images = new List<ImageDTO>();
                     foreach (var i in item.Images)
                     {
                         ImageDTO image = new ImageDTO();
                         image.Text = item.Alt;
                         using (var reader = new BinaryReader(i.InputStream))
                             image.Photo = reader.ReadBytes(i.ContentLength);
-                        product.Images = new List<ImageDTO>();
                         product.Images.Add(image);
                     }
                 }
                 else
                 {
+                    product.Images = new List<ImageDTO>();
                     foreach (var i in item.ImagesInDatebase)
                     {
-                        product.Images = new List<ImageDTO>();
                         product.Images.Add(_mappers.ToImageDTO.Map<ImageDM, ImageDTO>(i));
                     }
                 }
@@ -344,7 +368,11 @@ namespace SkinShop.Controllers
                     cloth.ForMen = false;
                 cloth.Name = item.Name;
                 cloth.Type = item.Type;
-                cloth.Properties = _mappers.ToPropertyDTO.Map<ICollection<PropertyDM>, List<PropertyDTO>>(item.Properties);
+                cloth.Properties = new List<PropertyDTO>();
+                for (int i = 0; i < item.PropertyNames.Count; i++)
+                {
+                    cloth.Properties.Add(new PropertyDTO() { Name = item.PropertyNames[i], Value = item.PropertyValues[i] });
+                }
                 cloth.Colors = new List<ColorDTO>();
                 foreach(var i in item.SelectedColors)
                 {
@@ -457,13 +485,13 @@ namespace SkinShop.Controllers
                 ComputerComponentDTO compComp = new ComputerComponentDTO();
                 if (item.Images != null)
                 {
+                    product.Images = new List<ImageDTO>();
                     foreach (var i in item.Images)
                     {
                         ImageDTO image = new ImageDTO();
                         image.Text = item.Alt;
                         using (var reader = new BinaryReader(i.InputStream))
                             image.Photo = reader.ReadBytes(i.ContentLength);
-                        product.Images = new List<ImageDTO>();
                         product.Images.Add(image);
                     }
                 }
@@ -499,7 +527,11 @@ namespace SkinShop.Controllers
                         compComp.Type = ComponentType.SystemBlock;
                         break;
                 }
-                compComp.Properties = _mappers.ToPropertyDTO.Map<ICollection<PropertyDM>, ICollection<PropertyDTO>>(item.Properties);
+                compComp.Properties = new List<PropertyDTO>();
+                for (int i = 0; i < item.PropertyNames.Count; i++)
+                {
+                    compComp.Properties.Add(new PropertyDTO() { Name = item.PropertyNames[i], Value = item.PropertyValues[i] });
+                }
                 OperationDetails result = _adminService.CreateComputerComponent(product, compComp, product.Name);
                 ViewBag.Result = result.Message;
                 ViewBag.Status = result.Succedeed;
@@ -609,13 +641,13 @@ namespace SkinShop.Controllers
                 ComputerDTO computer = new ComputerDTO();
                 if (item.Images != null)
                 {
+                    product.Images = new List<ImageDTO>();
                     foreach (var i in item.Images)
                     {
                         ImageDTO image = new ImageDTO();
                         image.Text = item.Alt;
                         using (var reader = new BinaryReader(i.InputStream))
                             image.Photo = reader.ReadBytes(i.ContentLength);
-                        product.Images = new List<ImageDTO>();
                         product.Images.Add(image);
                     }
                 }
@@ -646,7 +678,11 @@ namespace SkinShop.Controllers
                 {
                     computer.VideoCard.Add(new ComputerComponentDTO() { Name = i });
                 }
-                computer.Properties = _mappers.ToPropertyDTO.Map<ICollection<PropertyDM>, ICollection<PropertyDTO>>(item.Properties);
+                computer.Properties = new List<PropertyDTO>();
+                for (int i = 0; i < item.PropertyNames.Count; i++)
+                {
+                    computer.Properties.Add(new PropertyDTO() { Name = item.PropertyNames[i], Value = item.PropertyValues[i] });
+                }
                 OperationDetails result = _adminService.CreateComputer(product, computer, product.Name);
                 ViewBag.Result = result.Message;
                 ViewBag.Status = result.Succedeed;
@@ -676,70 +712,6 @@ namespace SkinShop.Controllers
             return View();
         }
 
-        //[HttpGet]
-        //public ActionResult UpdateContainer(int id = 0)
-        //{
-        //    ProductDM product = _mappers.ToProductDM.Map<ProductDTO, ProductDM>(_adminService.GetProduct(id));
-        //    ComputerDM result = _mappers.ToComputerDM.Map<ComputerDTO, ComputerDM>(_adminService.GetComputer(product.FromTableId));
-        //    CreateComputerVM comp = new CreateComputerVM()
-        //    {
-        //        Name = product.Name,
-        //        Description = product.Description,
-        //        Sale = product.Sale,
-        //        Price = product.Price,
-        //        SelectedMotherBoard = result.MotherBoard.Name,
-        //        SelectedPowerSupply = result.PowerSupply.Name,
-        //        SelectedProcessor = result.Processor.Name,
-        //        SelectedSystemBlock = result.SystemBlock.Name
-        //    };
-        //    comp.SelectedRAM = new List<string>();
-        //    foreach (var i in result.RAM)
-        //    {
-        //        comp.SelectedRAM.Add(i.Name);
-        //    }
-        //    comp.SelectedROM = new List<string>();
-        //    foreach (var i in result.ROM)
-        //    {
-        //        comp.SelectedROM.Add(i.Name);
-        //    }
-        //    comp.SelectedVideoCard = new List<string>();
-        //    foreach (var i in result.VideoCard)
-        //    {
-        //        comp.SelectedVideoCard.Add(i.Name);
-        //    }
-        //    if (product.Images != null && product.Images.FirstOrDefault() != null)
-        //    {
-        //        comp.ImagesInDatebase = new List<ImageDM>();
-        //        foreach (var i in product.Images)
-        //        {
-        //            comp.ImagesInDatebase.Add(i);
-        //            comp.Alt = i.Text;
-        //        }
-        //    }
-        //    List<ComputerComponentDM> compMotherBoard = _mappers.ToComputerComponentDM.Map<ICollection<ComputerComponentDTO>, List<ComputerComponentDM>>(_adminService.GetComputerComponentsByType(ComponentType.MotherBoard));
-        //    var compMotherBoardItems = compMotherBoard.Select(x => new SelectListItem() { Text = x.Name, Value = x.Name }).ToList();
-        //    List<ComputerComponentDM> compPowerSupply = _mappers.ToComputerComponentDM.Map<ICollection<ComputerComponentDTO>, List<ComputerComponentDM>>(_adminService.GetComputerComponentsByType(ComponentType.PowerSupply));
-        //    var compPowerSupplyItems = compPowerSupply.Select(x => new SelectListItem() { Text = x.Name, Value = x.Name }).ToList();
-        //    List<ComputerComponentDM> compProcessor = _mappers.ToComputerComponentDM.Map<ICollection<ComputerComponentDTO>, List<ComputerComponentDM>>(_adminService.GetComputerComponentsByType(ComponentType.Processor));
-        //    var compProcessorItems = compProcessor.Select(x => new SelectListItem() { Text = x.Name, Value = x.Name }).ToList();
-        //    List<ComputerComponentDM> compRAM = _mappers.ToComputerComponentDM.Map<ICollection<ComputerComponentDTO>, List<ComputerComponentDM>>(_adminService.GetComputerComponentsByType(ComponentType.RAM));
-        //    var compRAMItems = compRAM.Select(x => new SelectListItem() { Text = x.Name, Value = x.Name }).ToList();
-        //    List<ComputerComponentDM> compROM = _mappers.ToComputerComponentDM.Map<ICollection<ComputerComponentDTO>, List<ComputerComponentDM>>(_adminService.GetComputerComponentsByType(ComponentType.ROM));
-        //    var compROMItems = compROM.Select(x => new SelectListItem() { Text = x.Name, Value = x.Name }).ToList();
-        //    List<ComputerComponentDM> compSystemBlock = _mappers.ToComputerComponentDM.Map<ICollection<ComputerComponentDTO>, List<ComputerComponentDM>>(_adminService.GetComputerComponentsByType(ComponentType.SystemBlock));
-        //    var compSystemBlockItems = compSystemBlock.Select(x => new SelectListItem() { Text = x.Name, Value = x.Name }).ToList();
-        //    List<ComputerComponentDM> compVideoCard = _mappers.ToComputerComponentDM.Map<ICollection<ComputerComponentDTO>, List<ComputerComponentDM>>(_adminService.GetComputerComponentsByType(ComponentType.VideoCard));
-        //    var compVideoCardItems = compVideoCard.Select(x => new SelectListItem() { Text = x.Name, Value = x.Name }).ToList();
-        //    comp.MotherBoards = compMotherBoardItems;
-        //    comp.PowerSupplies = compPowerSupplyItems;
-        //    comp.Processors = compProcessorItems;
-        //    comp.RAMs = compRAMItems;
-        //    comp.ROMs = compROMItems;
-        //    comp.SystemBlocks = compSystemBlockItems;
-        //    comp.VideoCards = compVideoCardItems;
-        //    return View("CreateComputer", comp);
-        //}
-
         [HttpGet]
         public ActionResult CreateContainer(string table)
         {
@@ -762,13 +734,13 @@ namespace SkinShop.Controllers
                 ContainerDTO container = new ContainerDTO();
                 if (item.Images != null)
                 {
+                    product.Images = new List<ImageDTO>();
                     foreach (var i in item.Images)
                     {
                         ImageDTO image = new ImageDTO();
                         image.Text = item.Alt;
                         using (var reader = new BinaryReader(i.InputStream))
                             image.Photo = reader.ReadBytes(i.ContentLength);
-                        product.Images = new List<ImageDTO>();
                         product.Images.Add(image);
                     }
                 }
@@ -792,7 +764,11 @@ namespace SkinShop.Controllers
                 container.Name = item.Name;
                 container.Type = item.Type;
                 container.TypeOfHard = item.TypeOfHard;
-                container.Properties = _mappers.ToPropertyDTO.Map<ICollection<PropertyDM>, ICollection<PropertyDTO>>(item.Properties);
+                container.Properties = new List<PropertyDTO>();
+                for (int i = 0; i < item.PropertyNames.Count; i++)
+                {
+                    container.Properties.Add(new PropertyDTO() { Name = item.PropertyNames[i], Value = item.PropertyValues[i] });
+                }
                 OperationDetails result = _adminService.CreateContainer(product, container, product.Name);
                 ViewBag.Result = result.Message;
                 ViewBag.Status = result.Succedeed;
@@ -804,6 +780,54 @@ namespace SkinShop.Controllers
                     Value = x.Name
                 }).ToList();
                 item.Products = prods;
+                return View(item);
+            }
+            return View(item);
+        }
+
+        [HttpGet]
+        public ActionResult CreateOther()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult CreateOther(CreateOtherVM item)
+        {
+            if (ModelState.IsValid)
+            {
+                ProductDTO product = new ProductDTO() { Name = item.Name, Description = item.Description, Price = item.Price, Sale = item.Sale };
+                OtherDTO other = new OtherDTO();
+                if (item.Images != null)
+                {
+                    product.Images = new List<ImageDTO>();
+                    foreach (var i in item.Images)
+                    {
+                        ImageDTO image = new ImageDTO();
+                        image.Text = item.Alt;
+                        using (var reader = new BinaryReader(i.InputStream))
+                            image.Photo = reader.ReadBytes(i.ContentLength);
+                        product.Images.Add(image);
+                    }
+                }
+                else
+                {
+                    product.Images = new List<ImageDTO>();
+                    foreach (var i in item.ImagesInDatebase)
+                    {
+                        product.Images.Add(_mappers.ToImageDTO.Map<ImageDM, ImageDTO>(i));
+                    }
+                }
+                other.Name = item.Name;
+                other.Type = item.Type;
+                other.Properties = new List<PropertyDTO>();
+                for (int i = 0; i < item.PropertyNames.Count; i++)
+                {
+                    other.Properties.Add(new PropertyDTO() { Name = item.PropertyNames[i], Value = item.PropertyValues[i] });
+                }
+                OperationDetails result = _adminService.CreateOther(product, other, product.Name);
+                ViewBag.Result = result.Message;
+                ViewBag.Status = result.Succedeed;
                 return View(item);
             }
             return View(item);
@@ -847,12 +871,18 @@ namespace SkinShop.Controllers
         public ActionResult Users()
         {
             List<UserDM> users = _mappers.ToUserDM.Map<IEnumerable<UserDTO>, List<UserDM>>(_adminService.GetUsers());
+            users = (from u in users
+                    where u.UserName != User.Identity.Name
+                    select u).ToList();
             return View(users);
         }
 
         public ActionResult UserFilters(string userName = "", string[] roles = null)
         {
             List<UserDM> result = _mappers.ToUserDM.Map<IEnumerable<UserDTO>, List<UserDM>>(_adminService.GetUsers());
+            result = (from r in result
+                      where r.UserName != User.Identity.Name
+                      select r).ToList();
             if(userName != "")
             {
                 result = (from t in result
@@ -901,7 +931,7 @@ namespace SkinShop.Controllers
                 result = _adminService.SoftDelete(Tables.Skin, product.FromTableId);
                 if (result.Succedeed)
                 {
-                    return RedirectToAction("SkinFilters", "Home");
+                    return RedirectToAction("Index", "Home");
                 }
             }
             return RedirectToAction("PageNotFound", "Home");
@@ -916,7 +946,82 @@ namespace SkinShop.Controllers
                 result = _adminService.SoftDelete(Tables.Game, product.FromTableId);
                 if (result.Succedeed)
                 {
-                    return RedirectToAction("Main", "Home");
+                    return RedirectToAction("Games", "Home");
+                }
+            }
+            return RedirectToAction("PageNotFound", "Home");
+        }
+
+        public ActionResult DeleteCloth(int? id)
+        {
+            if (id != null)
+            {
+                ProductDTO product = _adminService.GetProduct(Convert.ToInt32(id));
+                OperationDetails result = _adminService.SoftDelete(Tables.Product, Convert.ToInt32(id));
+                result = _adminService.SoftDelete(Tables.Cloth, product.FromTableId);
+                if (result.Succedeed)
+                {
+                    return RedirectToAction("Clothes", "Home");
+                }
+            }
+            return RedirectToAction("PageNotFound", "Home");
+        }
+
+        public ActionResult DeleteComputerComponent(int? id)
+        {
+            if (id != null)
+            {
+                ProductDTO product = _adminService.GetProduct(Convert.ToInt32(id));
+                OperationDetails result = _adminService.SoftDelete(Tables.Product, Convert.ToInt32(id));
+                result = _adminService.SoftDelete(Tables.ComputerComponent, product.FromTableId);
+                if (result.Succedeed)
+                {
+                    return RedirectToAction("ComputerComponents", "Home");
+                }
+            }
+            return RedirectToAction("PageNotFound", "Home");
+        }
+
+        public ActionResult DeleteComputer(int? id)
+        {
+            if (id != null)
+            {
+                ProductDTO product = _adminService.GetProduct(Convert.ToInt32(id));
+                OperationDetails result = _adminService.SoftDelete(Tables.Product, Convert.ToInt32(id));
+                result = _adminService.SoftDelete(Tables.Computer, product.FromTableId);
+                if (result.Succedeed)
+                {
+                    return RedirectToAction("Computers", "Home");
+                }
+            }
+            return RedirectToAction("PageNotFound", "Home");
+        }
+
+        public ActionResult DeleteContainer(int? id)
+        {
+            if (id != null)
+            {
+                ProductDTO product = _adminService.GetProduct(Convert.ToInt32(id));
+                OperationDetails result = _adminService.SoftDelete(Tables.Product, Convert.ToInt32(id));
+                result = _adminService.SoftDelete(Tables.Container, product.FromTableId);
+                if (result.Succedeed)
+                {
+                    return RedirectToAction("Containers", "Home");
+                }
+            }
+            return RedirectToAction("PageNotFound", "Home");
+        }
+
+        public ActionResult DeleteOther(int? id)
+        {
+            if (id != null)
+            {
+                ProductDTO product = _adminService.GetProduct(Convert.ToInt32(id));
+                OperationDetails result = _adminService.SoftDelete(Tables.Product, Convert.ToInt32(id));
+                result = _adminService.SoftDelete(Tables.Other, product.FromTableId);
+                if (result.Succedeed)
+                {
+                    return RedirectToAction("Others", "Home");
                 }
             }
             return RedirectToAction("PageNotFound", "Home");

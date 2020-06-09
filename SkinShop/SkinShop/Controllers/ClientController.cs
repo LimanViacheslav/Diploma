@@ -439,5 +439,16 @@ namespace SkinShop.Controllers
             OperationDetails result = _clientService.SaleProduct(id, count, User.Identity.Name);
             return PartialView(result);
         }
+
+        public ActionResult DeleteComment(int commentId, int productId)
+        {
+            if (commentId == 0 || productId == 0)
+                return RedirectToAction("PageNotFound", "Home");
+            OperationDetails result = _adminService.DeleteComment(commentId);
+            if (!result.Succedeed)
+                return RedirectToAction("PageNotFound", "Home");
+            List<CommentDM> comments = _mappers.ToCommentDM.Map<ICollection<CommentDTO>, List<CommentDM>>(_clientService.GetCommentsForProduct(productId));
+            return PartialView("WriteComment", comments);
+        }
     }
 }

@@ -62,5 +62,12 @@ namespace SkinShop.Models.ViewModels
         [Display(Name = "Подпись к изображению")]
         [StringLength(100, MinimumLength = 2, ErrorMessage = "Недопустимая длина")]
         public string Alt { get; set; }
+
+        [Display(Name = "Дополнительные свойства")]
+        public virtual ICollection<PropertyDM> Properties { get; set; }
+
+        public List<string> PropertyNames { get; set; }
+
+        public List<string> PropertyValues { get; set; }
     }
 }
